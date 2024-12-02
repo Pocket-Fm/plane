@@ -47,7 +47,7 @@ export const CommandPaletteProjectActions: React.FC<Props> = (props) => {
         >
           <div className="flex items-center gap-2 text-custom-text-200">
             <DiceIcon className="h-3.5 w-3.5" />
-            Create new module
+            Create new promo
           </div>
           <kbd>M</kbd>
         </Command.Item>

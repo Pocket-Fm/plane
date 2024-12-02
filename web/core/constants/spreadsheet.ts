@@ -96,7 +96,7 @@ export const SPREADSHEET_PROPERTY_DETAILS: {
     Column: SpreadsheetLabelColumn,
   },
   modules: {
-    title: "Modules",
+    title: "Promos",
     ascendingOrderKey: "issue_module__module__name",
     ascendingOrderTitle: "A",
     descendingOrderKey: "-issue_module__module__name",

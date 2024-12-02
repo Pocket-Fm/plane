@@ -80,7 +80,7 @@ const navigation = (workspaceSlug: string, projectId: string) => [
     access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
   },
   {
-    name: "Modules",
+    name: "Promos",
     href: `/${workspaceSlug}/projects/${projectId}/modules`,
     Icon: DiceIcon,
     access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
@@ -506,7 +506,7 @@ export const SidebarProjectsListItem: React.FC<Props> = observer((props) => {
                 {navigation(workspaceSlug?.toString(), project?.id).map((item) => {
                   if (
                     (item.name === "Cycles" && !project.cycle_view) ||
-                    (item.name === "Modules" && !project.module_view) ||
+                    (item.name === "Promos" && !project.module_view) ||
                     (item.name === "Views" && !project.issue_views_view) ||
                     (item.name === "Pages" && !project.page_view) ||
                     (item.name === "Intake" && !project.inbox_view)

@@ -83,8 +83,8 @@ const ButtonContent: React.FC<ButtonContentProps> = (props) => {
               <div className="max-w-40 flex-grow truncate">
                 {value.length > 0
                   ? value.length === 1
-                    ? `${getModuleById(value[0])?.name || "module"}`
-                    : `${value.length} Module${value.length === 1 ? "" : "s"}`
+                    ? `${getModuleById(value[0])?.name || "promo"}`
+                    : `${value.length} Promo${value.length === 1 ? "" : "s"}`
                   : placeholder}
               </div>
             )}
@@ -256,7 +256,7 @@ export const ModuleDropdown: React.FC<Props> = observer((props) => {
           <DropdownButton
             className={buttonClassName}
             isActive={isOpen}
-            tooltipHeading="Module"
+            tooltipHeading="Promo"
             tooltipContent={
               Array.isArray(value)
                 ? `${value
