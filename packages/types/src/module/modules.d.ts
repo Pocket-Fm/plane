@@ -90,6 +90,14 @@ export interface IModule {
   updated_at: string;
   created_by?: string;
   updated_by?: string;
+
+  // promo attrs (Since Module IS A _Promo_)
+  show_id: string;
+  original_show_id: string;
+  team: string;
+  format: string;
+  parent_id: string;
+  opening_line: string;
 }
 
 export interface ModuleIssueResponse {

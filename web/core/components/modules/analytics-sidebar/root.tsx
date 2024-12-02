@@ -9,6 +9,7 @@ import {
   CalendarClock,
   ChevronDown,
   ChevronRight,
+  Clapperboard,
   Info,
   LinkIcon,
   Plus,
@@ -30,6 +31,7 @@ import {
   setToast,
   ArchiveIcon,
   TextArea,
+  Input
 } from "@plane/ui";
 // components
 import { DateRangeDropdown, MemberDropdown } from "@/components/dropdowns";
@@ -63,6 +65,13 @@ const defaultValues: Partial<IModule> = {
   start_date: null,
   target_date: null,
   status: "backlog",
+  // promo attrs
+  show_id: "",
+  original_show_id: "",
+  team: "",
+  format: "",
+  parent_id: "",
+  opening_line: "",
 };
 
 type Props = {
@@ -476,6 +485,7 @@ export const ModuleAnalyticsSidebar: React.FC<Props> = observer((props) => {
               )}
             />
           </div>
+
           <div className="flex items-center justify-start gap-1">
             <div className="flex w-2/5 items-center justify-start gap-2 text-custom-text-300">
               <Users className="h-4 w-4" />
@@ -496,6 +506,77 @@ export const ModuleAnalyticsSidebar: React.FC<Props> = observer((props) => {
                     buttonVariant={value && value?.length > 0 ? "transparent-without-text" : "background-with-text"}
                     buttonClassName={value && value.length > 0 ? "hover:bg-transparent px-0" : ""}
                     disabled={!isEditingAllowed || isArchived}
+                  />
+                </div>
+              )}
+            />
+          </div>
+
+          <div className="flex items-center justify-start gap-1">
+            <div className="flex w-2/5 items-center justify-start gap-2 text-custom-text-300">
+              <Clapperboard className="h-4 w-4" />
+              <span className="text-base">Show ID</span>
+            </div>
+            <Controller
+              control={control}
+              name="show_id"
+              render={({ field: { value } }) => (
+                <div className="h-7 w-3/5">
+                  <Input
+                    id="show_id"
+                    name="show_id"
+                    type="text"
+                    value={value}
+                    placeholder="Show ID"
+                    className="w-full cursor-not-allowed !text-custom-text-400"
+                    autoComplete="on"
+                  />
+                </div>
+              )}
+            />
+          </div>
+          <div className="flex items-center justify-start gap-1">
+            <div className="flex w-2/5 items-center justify-start gap-2 text-custom-text-300">
+              <Clapperboard className="h-4 w-4" />
+              <span className="text-sm">Original Show ID</span>
+            </div>
+            <Controller
+              control={control}
+              name="original_show_id"
+              render={({ field: { value } }) => (
+                <div className="h-7 w-3/5">
+                  <Input
+                    id="original_show_id"
+                    name="original_show_id"
+                    type="text"
+                    value={value}
+                    placeholder="Original Show ID"
+                    className="w-full cursor-not-allowed !text-custom-text-400"
+                    autoComplete="on"
+                  />
+                </div>
+              )}
+            />
+          </div>
+
+          <div className="flex items-center justify-start gap-1">
+            <div className="flex w-2/5 items-center justify-start gap-2 text-custom-text-300">
+              <Clapperboard className="h-4 w-4" />
+              <span className="text-base">Opening Line</span>
+            </div>
+            <Controller
+              control={control}
+              name="show_id"
+              render={({ field: { value } }) => (
+                <div className="h-7 w-3/5">
+                  <Input
+                    id="opening_line"
+                    name="opening_line"
+                    type="text"
+                    value={value}
+                    placeholder="Promo Opening line"
+                    className="w-full cursor-not-allowed !text-custom-text-400"
+                    autoComplete="on"
                   />
                 </div>
               )}
