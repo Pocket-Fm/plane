@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { IModule } from "@plane/types";
 // ui
-import { Button, Input, TextArea } from "@plane/ui";
+import { Button, Dropdown, Input, TextArea } from "@plane/ui";
 // components
 import { DateRangeDropdown, ProjectDropdown, MemberDropdown } from "@/components/dropdowns";
 import { ModuleStatusSelect } from "@/components/modules";
@@ -14,6 +14,7 @@ import { ETabIndices } from "@/constants/tab-indices";
 import { getDate, renderFormattedPayloadDate } from "@/helpers/date-time.helper";
 import { shouldRenderProject } from "@/helpers/project.helper";
 import { getTabIndex } from "@/helpers/tab-indices.helper";
+import { ChevronDownIcon } from "lucide-react";
 // types
 
 type Props = {
@@ -94,7 +95,36 @@ export const ModuleForm: React.FC<Props> = (props) => {
               )}
             />
           )}
-          <h3 className="text-xl font-medium text-custom-text-200">{status ? "Update" : "Create"} module</h3>
+          <h3 className="text-xl font-medium text-custom-text-200">{status ? "Update" : "Create"} promo</h3>
+            <Controller
+              control={control}
+              name="format"
+              render={({ field: { value, onChange } }) => (
+                <div className="h-7">
+                  <Dropdown
+                    value={value}
+                    options={[
+                      { data: "Thumbnail", value: "thumbnail" },
+                      { data: "Gen AI", value: "genai" },
+                      { data: "Live Action", value: "live_action" },
+                      { data: "Animation", value: "animation" },
+                      { data: "Sketch", value: "sketch" },
+                    ]}
+                    buttonContent={(isOpen, value)=>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs">{value?value:"Select Format"}</span>
+                          <ChevronDownIcon className={`h-4 w-4 ${isOpen ? "rotate-180" : ""}`} />
+                        </div>
+                    }
+                    buttonContainerClassName="border-[0.5px] px-2 rounded border-custom-border-300"
+                    keyExtractor={(item) => item.value}
+                    onChange={onChange}
+                    tabIndex={getIndex("format")}
+                    disableSearch
+                  />
+                </div>
+              )}
+            />
         </div>
         <div className="space-y-3">
           <div className="space-y-1">
@@ -143,6 +173,71 @@ export const ModuleForm: React.FC<Props> = (props) => {
               )}
             />
           </div>
+          <div className="inline-flex">
+            <Controller
+              control={control}
+              name="show_id"
+              rules={{
+                required: "Show ID is required",
+              }}
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  id="show_id"
+                  name="show_id"
+                  type="text"
+                  value={value}
+                  onChange={onChange}
+                  hasError={Boolean(errors?.name)}
+                  placeholder="Show ID"
+                  className="w-1/2 text-base"
+                  tabIndex={getIndex("show_id")}
+                  autoFocus
+                />
+              )}
+            />
+            <span className="text-xs text-red-500">{errors?.name?.message}</span>
+            <Controller
+              control={control}
+              name="original_show_id"
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  id="original_show_id"
+                  name="original_show_id"
+                  type="text"
+                  value={value}
+                  onChange={onChange}
+                  hasError={Boolean(errors?.name)}
+                  placeholder="Original Show ID"
+                  className="w-1/2 text-base"
+                  tabIndex={getIndex("original_show_id")}
+                  autoFocus
+                />
+              )}
+            />
+            <span className="text-xs text-red-500">{errors?.name?.message}</span>
+          </div>
+
+          <div>
+            <Controller
+              control={control}
+              name="opening_line"
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  id="opening_line"
+                  name="opening_line"
+                  type="text"
+                  value={value}
+                  onChange={onChange}
+                  hasError={Boolean(errors?.name)}
+                  placeholder="Opening line"
+                  className="w-full text-base"
+                  tabIndex={getIndex("opening_line")}
+                  autoFocus
+                />
+              )}
+            />
+          </div>
+
           <div className="flex flex-wrap items-center gap-2">
             <Controller
               control={control}
@@ -222,8 +317,9 @@ export const ModuleForm: React.FC<Props> = (props) => {
           Cancel
         </Button>
         <Button variant="primary" size="sm" type="submit" loading={isSubmitting} tabIndex={getIndex("submit")}>
-          {status ? (isSubmitting ? "Updating" : "Update Module") : isSubmitting ? "Creating" : "Create Module"}
+          {status ? (isSubmitting ? "Updating" : "Update Module") : isSubmitting ? "Creating" : "Create Promo"}
         </Button>
+        {/* upon creating a promo here, create N issues */}
       </div>
     </form>
   );
