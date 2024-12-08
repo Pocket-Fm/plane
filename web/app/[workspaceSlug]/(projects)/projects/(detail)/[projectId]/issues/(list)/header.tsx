@@ -41,7 +41,8 @@ export const ProjectIssuesHeader = observer(() => {
 
   const issuesCount = getGroupIssueCount(undefined, undefined, false);
   const canUserCreateIssue = allowPermissions(
-    [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
+    //[EUserPermissions.ADMIN, EUserPermissions.MEMBER],
+    [],//nobody can create issues
     EUserPermissionsLevel.PROJECT
   );
 
@@ -74,7 +75,7 @@ export const ProjectIssuesHeader = observer(() => {
 
             <Breadcrumbs.BreadcrumbItem
               type="text"
-              link={<BreadcrumbLink label="Issues" icon={<LayersIcon className="h-4 w-4 text-custom-text-300" />} />}
+              link={<BreadcrumbLink label="Tasks" icon={<LayersIcon className="h-4 w-4 text-custom-text-300" />} />}
             />
           </Breadcrumbs>
           {issuesCount && issuesCount > 0 ? (
@@ -119,7 +120,7 @@ export const ProjectIssuesHeader = observer(() => {
             }}
             size="sm"
           >
-            <div className="hidden sm:block">Add</div> Issue
+            <div className="hidden sm:block">Add</div> Task
           </Button>
         ) : (
           <></>

@@ -300,7 +300,7 @@ export const ModuleIssuesHeader: React.FC = observer(() => {
                 }}
                 size="sm"
               >
-                Add issue
+                Add task
               </Button>
             </>
           ) : (

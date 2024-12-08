@@ -20,19 +20,19 @@ export const ProfileStats: React.FC<Props> = ({ userProfile }) => {
     {
       icon: CreateIcon,
       route: "created",
-      title: "Issues created",
+      title: "Tasks created",
       value: userProfile?.created_issues ?? "...",
     },
     {
       icon: UserCircle2,
       route: "assigned",
-      title: "Issues assigned",
+      title: "Tasks assigned",
       value: userProfile?.assigned_issues ?? "...",
     },
     {
       icon: LayerStackIcon,
       route: "subscribed",
-      title: "Issues subscribed",
+      title: "Tasks subscribed",
       value: userProfile?.subscribed_issues ?? "...",
     },
   ];

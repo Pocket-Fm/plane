@@ -206,22 +206,22 @@ export const UNFILTERED_ISSUES_TABS_LIST: {
 
 export const ASSIGNED_ISSUES_EMPTY_STATES = {
   pending: {
-    title: "Issues assigned to you that are pending\nwill show up here.",
+    title: "Tasks assigned to you that are pending\nwill show up here.",
     darkImage: UpcomingIssuesDark,
     lightImage: UpcomingIssuesLight,
   },
   upcoming: {
-    title: "Upcoming issues assigned to\nyou will show up here.",
+    title: "Tasks assigned to\nyou will show up here.",
     darkImage: UpcomingIssuesDark,
     lightImage: UpcomingIssuesLight,
   },
   overdue: {
-    title: "Issues assigned to you that are past\ntheir due date will show up here.",
+    title: "Tasks assigned to you that are past\ntheir due date will show up here.",
     darkImage: OverdueIssuesDark,
     lightImage: OverdueIssuesLight,
   },
   completed: {
-    title: "Issues assigned to you that you have\nmarked Completed will show up here.",
+    title: "Tasks assigned to you that you have\nmarked Completed will show up here.",
     darkImage: CompletedIssuesDark,
     lightImage: CompletedIssuesLight,
   },
@@ -229,22 +229,22 @@ export const ASSIGNED_ISSUES_EMPTY_STATES = {
 
 export const CREATED_ISSUES_EMPTY_STATES = {
   pending: {
-    title: "Issues created by you that are pending\nwill show up here.",
+    title: "Tasks created by you that are pending\nwill show up here.",
     darkImage: UpcomingIssuesDark,
     lightImage: UpcomingIssuesLight,
   },
   upcoming: {
-    title: "Upcoming issues you created\nwill show up here.",
+    title: "Upcoming tasks you created\nwill show up here.",
     darkImage: UpcomingIssuesDark,
     lightImage: UpcomingIssuesLight,
   },
   overdue: {
-    title: "Issues created by you that are past their\ndue date will show up here.",
+    title: "Tasks created by you that are past their\ndue date will show up here.",
     darkImage: OverdueIssuesDark,
     lightImage: OverdueIssuesLight,
   },
   completed: {
-    title: "Issues created by you that you have\nmarked completed will show up here.",
+    title: "Tasks created by you that you have\nmarked completed will show up here.",
     darkImage: CompletedIssuesDark,
     lightImage: CompletedIssuesLight,
   },

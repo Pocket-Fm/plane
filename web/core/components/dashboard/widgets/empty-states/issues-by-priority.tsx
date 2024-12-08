@@ -16,7 +16,7 @@ export const IssuesByPriorityEmptyState = () => {
         <Image src={image} className="w-full h-full" alt="Issues by state group" />
       </div>
       <p className="text-sm font-medium text-custom-text-300">
-        Issues assigned to you, broken down by
+        Tasks assigned to you, broken down by
         <br />
         priority will show up here.
       </p>
