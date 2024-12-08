@@ -76,7 +76,7 @@ export const ProjectInboxHeader: FC = observer(() => {
             />
 
             <Button variant="primary" size="sm" onClick={() => setCreateIssueModal(true)}>
-              Add issue
+              Add task
             </Button>
           </div>
         ) : (

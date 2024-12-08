@@ -297,7 +297,7 @@ export const CycleIssuesHeader: React.FC = observer(() => {
                     }}
                     size="sm"
                   >
-                    Add issue
+                    Add task
                   </Button>
                 )}
               </>

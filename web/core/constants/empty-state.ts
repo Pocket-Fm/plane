@@ -116,7 +116,7 @@ const emptyStateDetails = {
     key: EmptyStateType.WORKSPACE_DASHBOARD,
     title: "Overview of your projects, activity, and metrics",
     description:
-      " Welcome to Plane, we are excited to have you here. Create your first project and track your issues, and this page will transform into a space that helps you progress. Admins will also see items which help their team progress.",
+      " Welcome to Plane, we are excited to have you here. Create your first project and track your tasks, and this page will transform into a space that helps you progress. Admins will also see items which help their team progress.",
     path: "/empty-state/onboarding/dashboard",
     // path: "/empty-state/onboarding/",
     primaryButton: {
@@ -141,7 +141,7 @@ const emptyStateDetails = {
       comicBox: {
         title: "Analytics works best with Cycles + Modules",
         description:
-          "First, timebox your issues into Cycles and, if you can, group issues that span more than a cycle into Modules. Check out both on the left nav.",
+          "First, timebox your tasks into Cycles and, if you can, group tasks that span more than a cycle into Modules. Check out both on the left nav.",
       },
     },
     accessType: "workspace",
@@ -166,53 +166,53 @@ const emptyStateDetails = {
   // all-issues
   [EmptyStateType.WORKSPACE_ALL_ISSUES]: {
     key: EmptyStateType.WORKSPACE_ALL_ISSUES,
-    title: "No issues in the project",
-    description: "First project done! Now, slice your work into trackable pieces with issues. Let's go!",
+    title: "No tasks in the project",
+    description: "First project done! Now, slice your work into trackable pieces with tasks. Let's go!",
     path: "/empty-state/all-issues/all-issues",
-    primaryButton: {
-      text: "Create new issue",
-    },
+    //primaryButton: {
+    //  text: "Create new issue",
+    //},
     accessType: "workspace",
     access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
   },
   [EmptyStateType.WORKSPACE_ASSIGNED]: {
     key: EmptyStateType.WORKSPACE_ASSIGNED,
-    title: "No issues yet",
-    description: "Issues assigned to you can be tracked from here.",
+    title: "No tasks yet",
+    description: "Tasks assigned to you can be tracked from here.",
     path: "/empty-state/all-issues/assigned",
-    primaryButton: {
-      text: "Create new issue",
-    },
+    //primaryButton: {
+    //  text: "Create new issue",
+    //},
     accessType: "workspace",
     access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
   },
   [EmptyStateType.WORKSPACE_CREATED]: {
     key: EmptyStateType.WORKSPACE_CREATED,
-    title: "No issues yet",
-    description: "All issues created by you come here, track them here directly.",
+    title: "No tasks yet",
+    description: "All tasks created by you come here, track them here directly.",
     path: "/empty-state/all-issues/created",
-    primaryButton: {
-      text: "Create new issue",
-    },
+    //primaryButton: {
+    //  text: "Create new issue",
+    //},
     accessType: "workspace",
     access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
   },
   [EmptyStateType.WORKSPACE_SUBSCRIBED]: {
     key: EmptyStateType.WORKSPACE_SUBSCRIBED,
-    title: "No issues yet",
-    description: "Subscribe to issues you are interested in, track all of them here.",
+    title: "No tasks yet",
+    description: "Subscribe to tasks you are interested in, track all of them here.",
     path: "/empty-state/all-issues/subscribed",
   },
   [EmptyStateType.WORKSPACE_CUSTOM_VIEW]: {
     key: EmptyStateType.WORKSPACE_CUSTOM_VIEW,
-    title: "No issues yet",
-    description: "Issues that applies to the filters, track all of them here.",
+    title: "No tasks yet",
+    description: "Tasks that applies to the filters, track all of them here.",
     path: "/empty-state/all-issues/custom-view",
   },
   [EmptyStateType.WORKSPACE_PROJECT_NOT_FOUND]: {
     key: EmptyStateType.WORKSPACE_PROJECT_NOT_FOUND,
     title: "No such project exists",
-    description: "To create issues or manage your work, you need to create a project or be a part of one.",
+    description: "To create tasks or manage your work, you need to create a project or be a part of one.",
     path: "/empty-state/onboarding/projects",
     primaryButton: {
       text: "Create Project",
@@ -228,7 +228,7 @@ const emptyStateDetails = {
   [EmptyStateType.WORKSPACE_NO_PROJECTS]: {
     key: EmptyStateType.WORKSPACE_NO_PROJECTS,
     title: "No project",
-    description: "To create issues or manage your work, you need to create a project or be a part of one.",
+    description: "To create tasks or manage your work, you need to create a project or be a part of one.",
     path: "/empty-state/onboarding/projects",
     primaryButton: {
       text: "Start your first project",
@@ -271,44 +271,44 @@ const emptyStateDetails = {
     key: EmptyStateType.PROFILE_ASSIGNED,
     title: "No activities yet",
     description:
-      "Get started by creating a new issue! Add details and properties to it. Explore more in Plane to see your activity.",
+      "Get started by creating a new task! Add details and properties to it. Explore more in Plane to see your activity.",
     path: "/empty-state/profile/activity",
   },
   [EmptyStateType.PROFILE_ASSIGNED]: {
     key: EmptyStateType.PROFILE_ASSIGNED,
-    title: "No issues are assigned to you",
-    description: "Issues assigned to you can be tracked from here.",
+    title: "No tasks are assigned to you",
+    description: "Tasks assigned to you can be tracked from here.",
     path: "/empty-state/profile/assigned",
   },
   [EmptyStateType.PROFILE_CREATED]: {
     key: EmptyStateType.PROFILE_CREATED,
-    title: "No issues yet",
-    description: "All issues created by you come here, track them here directly.",
+    title: "No tasks yet",
+    description: "All tasks created by you come here, track them here directly.",
     path: "/empty-state/profile/created",
   },
   [EmptyStateType.PROFILE_SUBSCRIBED]: {
     key: EmptyStateType.PROFILE_SUBSCRIBED,
-    title: "No issues yet",
-    description: "Subscribe to issues you are interested in, track all of them here.",
+    title: "No tasks yet",
+    description: "Subscribe to tasks you are interested in, track all of them here.",
     path: "/empty-state/profile/subscribed",
   },
   // project settings
   [EmptyStateType.PROJECT_SETTINGS_LABELS]: {
     key: EmptyStateType.PROJECT_SETTINGS_LABELS,
     title: "No labels yet",
-    description: "Create labels to help organize and filter issues in you project.",
+    description: "Create labels to help organize and filter tasks in you project.",
     path: "/empty-state/project-settings/labels",
   },
   [EmptyStateType.PROJECT_SETTINGS_INTEGRATIONS]: {
     key: EmptyStateType.PROJECT_SETTINGS_INTEGRATIONS,
     title: "No integrations configured",
-    description: "Configure GitHub and other integrations to sync your project issues.",
+    description: "Configure GitHub and other integrations to sync your project tasks.",
     path: "/empty-state/project-settings/integrations",
   },
   [EmptyStateType.PROJECT_SETTINGS_ESTIMATE]: {
     key: EmptyStateType.PROJECT_SETTINGS_ESTIMATE,
     title: "No estimates added",
-    description: "Create a set of estimates to communicate the amount of work per issue.",
+    description: "Create a set of estimates to communicate the amount of work per task.",
     path: "/empty-state/project-settings/estimates",
   },
   // project cycles
@@ -331,15 +331,15 @@ const emptyStateDetails = {
   },
   [EmptyStateType.PROJECT_CYCLE_NO_ISSUES]: {
     key: EmptyStateType.PROJECT_CYCLE_NO_ISSUES,
-    title: "No issues added to the cycle",
-    description: "Add or create issues you wish to timebox and deliver within this cycle",
+    title: "No tasks added to the cycle",
+    description: "Add or create tasks you wish to timebox and deliver within this cycle",
     path: "/empty-state/cycle-issues/",
-    primaryButton: {
-      text: "Create new issue ",
-    },
-    secondaryButton: {
-      text: "Add an existing issue",
-    },
+    //primaryButton: {
+    //  text: "Create new issue ",
+    //},
+    //secondaryButton: {
+    //  text: "Add an existing issue",
+    //},
     accessType: "project",
     access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
   },
@@ -352,9 +352,9 @@ const emptyStateDetails = {
   },
   [EmptyStateType.PROJECT_CYCLE_COMPLETED_NO_ISSUES]: {
     key: EmptyStateType.PROJECT_CYCLE_COMPLETED_NO_ISSUES,
-    title: "No issues in the cycle",
+    title: "No tasks in the cycle",
     description:
-      "No issues in the cycle. Issues are either transferred or hidden. To see hidden issues if any, update your display properties accordingly.",
+      "No tasks in the cycle. Tasks are either transferred or hidden. To see hidden tasks if any, update your display properties accordingly.",
     path: "/empty-state/cycle/completed-no-issues",
   },
   [EmptyStateType.PROJECT_ARCHIVED_NO_CYCLES]: {
@@ -373,7 +373,7 @@ const emptyStateDetails = {
   // empty filters
   [EmptyStateType.PROJECT_EMPTY_FILTER]: {
     key: EmptyStateType.PROJECT_EMPTY_FILTER,
-    title: "No issues found matching the filters applied",
+    title: "No tasks found matching the filters applied",
     path: "/empty-state/empty-filters/",
     secondaryButton: {
       text: "Clear all filters",
@@ -383,7 +383,7 @@ const emptyStateDetails = {
   },
   [EmptyStateType.PROJECT_ARCHIVED_EMPTY_FILTER]: {
     key: EmptyStateType.PROJECT_ARCHIVED_EMPTY_FILTER,
-    title: "No issues found matching the filters applied",
+    title: "No tasks found matching the filters applied",
     path: "/empty-state/empty-filters/",
     secondaryButton: {
       text: "Clear all filters",
@@ -393,7 +393,7 @@ const emptyStateDetails = {
   },
   [EmptyStateType.PROJECT_DRAFT_EMPTY_FILTER]: {
     key: EmptyStateType.PROJECT_DRAFT_EMPTY_FILTER,
-    title: "No issues found matching the filters applied",
+    title: "No tasks found matching the filters applied",
     path: "/empty-state/empty-filters/",
     secondaryButton: {
       text: "Clear all filters",
@@ -404,26 +404,29 @@ const emptyStateDetails = {
   //  project issues
   [EmptyStateType.PROJECT_NO_ISSUES]: {
     key: EmptyStateType.PROJECT_NO_ISSUES,
-    title: "Create an issue and assign it to someone, even yourself",
+    //title: "Create an issue and assign it to someone, even yourself",
+    title: "No tasks yet...",
+    //description:
+    //  "Think of issues as jobs, tasks, work, or JTBD. Which we like. An issue and its sub-issues are usually time-based actionables assigned to members of your team. Your team creates, assigns, and completes issues to move your project towards its goal.",
     description:
-      "Think of issues as jobs, tasks, work, or JTBD. Which we like. An issue and its sub-issues are usually time-based actionables assigned to members of your team. Your team creates, assigns, and completes issues to move your project towards its goal.",
+      "You cannot create a task directly. Create a Promo, and let the system take care of creating corresponding tasks.",
     path: "/empty-state/onboarding/issues",
-    primaryButton: {
-      text: "Create your first issue",
-      comicBox: {
-        title: "Issues are building blocks in Plane.",
-        description:
-          "Redesign the Plane UI, Rebrand the company, or Launch the new fuel injection system are examples of issues that likely have sub-issues.",
-      },
-    },
+    //primaryButton: {
+    //  text: "Create your first issue",
+    //  comicBox: {
+    //    title: "Issues are building blocks in Plane.",
+    //    description:
+    //      "Redesign the Plane UI, Rebrand the company, or Launch the new fuel injection system are examples of issues that likely have sub-issues.",
+    //  },
+    //},
     accessType: "project",
     access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
   },
   [EmptyStateType.PROJECT_ARCHIVED_NO_ISSUES]: {
     key: EmptyStateType.PROJECT_ARCHIVED_NO_ISSUES,
-    title: "No archived issues yet",
+    title: "No archived tasks yet",
     description:
-      "Manually or through automation, you can archive issues that are completed or cancelled. Find them here once archived.",
+      "Manually or through automation, you can archive tasks that are completed or cancelled. Find them here once archived.",
     path: "/empty-state/archived/empty-issues",
     primaryButton: {
       text: "Set automation",
@@ -433,9 +436,9 @@ const emptyStateDetails = {
   },
   [EmptyStateType.PROJECT_DRAFT_NO_ISSUES]: {
     key: EmptyStateType.PROJECT_DRAFT_NO_ISSUES,
-    title: "No draft issues yet",
+    title: "No draft tasks yet",
     description:
-      "Quickly stepping away but want to keep your place? No worries – save a draft now. Your issues will be right here waiting for you.",
+      "Quickly stepping away but want to keep your place? No worries – save a draft now. Your tasks will be right here waiting for you.",
     path: "/empty-state/draft/draft-issues-empty",
   },
   [EmptyStateType.VIEWS_EMPTY_SEARCH]: {
@@ -459,15 +462,15 @@ const emptyStateDetails = {
   // project module
   [EmptyStateType.PROJECT_MODULE_ISSUES]: {
     key: EmptyStateType.PROJECT_MODULE_ISSUES,
-    title: "No issues in the module",
-    description: "Create or add issues which you want to accomplish as part of this module",
+    title: "No tasks in the promo",
+    description: "Create or add tasks which you want to accomplish as part of this promo",
     path: "/empty-state/module-issues/",
-    primaryButton: {
-      text: "Create new issue ",
-    },
-    secondaryButton: {
-      text: "Add an existing issue",
-    },
+    //primaryButton: {
+    //  text: "Create new issue ",
+    //},
+    //secondaryButton: {
+    //  text: "Add an existing issue",
+    //},
     accessType: "project",
     access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
   },
@@ -475,7 +478,7 @@ const emptyStateDetails = {
     key: EmptyStateType.PROJECT_MODULE,
     title: "Map your project milestones to Modules and track aggregated work easily.",
     description:
-      "A group of issues that belong to a logical, hierarchical parent form a module. Think of them as a way to track work by project milestones. They have their own periods and deadlines as well as analytics to help you see how close or far you are from a milestone.",
+      "A group of tasks that belong to a logical, hierarchical parent form a module. Think of them as a way to track work by project milestones. They have their own periods and deadlines as well as analytics to help you see how close or far you are from a milestone.",
     path: "/empty-state/onboarding/modules",
     primaryButton: {
       text: "Build your first module",
@@ -503,7 +506,7 @@ const emptyStateDetails = {
     primaryButton: {
       text: "Create your first view",
       comicBox: {
-        title: "Views work atop Issue properties.",
+        title: "Views work atop Task properties.",
         description: "You can create a view from here with as many properties as filters as you see fit.",
       },
     },
@@ -515,7 +518,7 @@ const emptyStateDetails = {
     key: EmptyStateType.PROJECT_PAGE,
     title: "Write a note, a doc, or a full knowledge base. Get Galileo, Plane’s AI assistant, to help you get started",
     description:
-      "Pages are thoughts potting space in Plane. Take down meeting notes, format them easily, embed issues, lay them out using a library of components, and keep them all in your project’s context. To make short work of any doc, invoke Galileo, Plane’s AI, with a shortcut or the click of a button.",
+      "Pages are thoughts potting space in Plane. Take down meeting notes, format them easily, embed tasks, lay them out using a library of components, and keep them all in your project’s context. To make short work of any doc, invoke Galileo, Plane’s AI, with a shortcut or the click of a button.",
     path: "/empty-state/onboarding/pages",
     primaryButton: {
       text: "Create your first page",
@@ -555,7 +558,7 @@ const emptyStateDetails = {
     key: EmptyStateType.WORKSPACE_PAGE,
     title: "Write a note, a doc, or a full knowledge base. Get Galileo, Plane’s AI assistant, to help you get started",
     description:
-      "Pages are thoughts potting space in Plane. Take down meeting notes, format them easily, embed issues, lay them out using a library of components, and keep them all in your project’s context. To make short work of any doc, invoke Galileo, Plane’s AI, with a shortcut or the click of a button.",
+      "Pages are thoughts potting space in Plane. Take down meeting notes, format them easily, embed tasks, lay them out using a library of components, and keep them all in your project’s context. To make short work of any doc, invoke Galileo, Plane’s AI, with a shortcut or the click of a button.",
     path: "/empty-state/onboarding/pages",
     primaryButton: {
       text: "Create your first page",
@@ -599,18 +602,18 @@ const emptyStateDetails = {
   },
   [EmptyStateType.ISSUE_RELATION_SEARCH_EMPTY_STATE]: {
     key: EmptyStateType.ISSUE_RELATION_SEARCH_EMPTY_STATE,
-    title: "No maching issues found",
+    title: "No maching tasks found",
     path: "/empty-state/search/search",
   },
   [EmptyStateType.ISSUE_RELATION_EMPTY_STATE]: {
     key: EmptyStateType.ISSUE_RELATION_EMPTY_STATE,
-    title: "No issues found",
+    title: "No tasks found",
     path: "/empty-state/search/issues",
   },
   [EmptyStateType.ISSUE_COMMENT_EMPTY_STATE]: {
     key: EmptyStateType.ISSUE_COMMENT_EMPTY_STATE,
     title: "No comments yet",
-    description: "Comments can be used as a discussion and \n follow-up space for the issues",
+    description: "Comments can be used as a discussion and \n follow-up space for the tasks ",
     path: "/empty-state/search/comments",
   },
 
@@ -621,38 +624,38 @@ const emptyStateDetails = {
   },
   [EmptyStateType.NOTIFICATION_ALL_EMPTY_STATE]: {
     key: EmptyStateType.NOTIFICATION_ALL_EMPTY_STATE,
-    title: "No issues assigned",
-    description: "Updates for issues assigned to you can be \n seen here",
+    title: "No tasks assigned",
+    description: "Updates for tasks assigned to you can be \n seen here",
     path: "/empty-state/search/notification",
   },
   [EmptyStateType.NOTIFICATION_MENTIONS_EMPTY_STATE]: {
     key: EmptyStateType.NOTIFICATION_MENTIONS_EMPTY_STATE,
-    title: "No issues assigned",
-    description: "Updates for issues assigned to you can be \n seen here",
+    title: "No tasks assigned",
+    description: "Updates for tasks assigned to you can be \n seen here",
     path: "/empty-state/search/notification",
   },
   [EmptyStateType.NOTIFICATION_MY_ISSUE_EMPTY_STATE]: {
     key: EmptyStateType.NOTIFICATION_MY_ISSUE_EMPTY_STATE,
-    title: "No issues assigned",
-    description: "Updates for issues assigned to you can be \n seen here",
+    title: "No tasks assigned",
+    description: "Updates for tasks assigned to you can be \n seen here",
     path: "/empty-state/search/notification",
   },
   [EmptyStateType.NOTIFICATION_CREATED_EMPTY_STATE]: {
     key: EmptyStateType.NOTIFICATION_CREATED_EMPTY_STATE,
-    title: "No updates to issues",
-    description: "Updates to issues created by you can be \n seen here",
+    title: "No updates to tasks ",
+    description: "Updates to tasks created by you can be \n seen here",
     path: "/empty-state/search/notification",
   },
   [EmptyStateType.NOTIFICATION_SUBSCRIBED_EMPTY_STATE]: {
     key: EmptyStateType.NOTIFICATION_SUBSCRIBED_EMPTY_STATE,
-    title: "No updates to issues",
-    description: "Updates to any issue you are \n subscribed to can be seen here",
+    title: "No updates to tasks",
+    description: "Updates to any tasks you are \n subscribed to can be seen here",
     path: "/empty-state/search/notification",
   },
   [EmptyStateType.NOTIFICATION_UNREAD_EMPTY_STATE]: {
     key: EmptyStateType.NOTIFICATION_UNREAD_EMPTY_STATE,
     title: "No unread notifications",
-    description: "Congratulations, you are up-to-date \n with everything happening in the issues \n you care about",
+    description: "Congratulations, you are up-to-date \n with everything happening in the tasks \n you care about",
     path: "/empty-state/search/notification",
   },
   [EmptyStateType.NOTIFICATION_SNOOZED_EMPTY_STATE]: {
@@ -670,34 +673,34 @@ const emptyStateDetails = {
 
   [EmptyStateType.ACTIVE_CYCLE_PROGRESS_EMPTY_STATE]: {
     key: EmptyStateType.ACTIVE_CYCLE_PROGRESS_EMPTY_STATE,
-    title: "Add issues to the cycle to view it's \n progress",
+    title: "Add tasks to the cycle to view it's \n progress",
     path: "/empty-state/active-cycle/progress",
   },
   [EmptyStateType.ACTIVE_CYCLE_CHART_EMPTY_STATE]: {
     key: EmptyStateType.ACTIVE_CYCLE_CHART_EMPTY_STATE,
-    title: "Add issues to the cycle to view the \n burndown chart.",
+    title: "Add tasks to the cycle to view the \n burndown chart.",
     path: "/empty-state/active-cycle/chart",
   },
   [EmptyStateType.ACTIVE_CYCLE_PRIORITY_ISSUE_EMPTY_STATE]: {
     key: EmptyStateType.ACTIVE_CYCLE_PRIORITY_ISSUE_EMPTY_STATE,
-    title: "Observe high priority issues tackled in \n the cycle at a glance.",
+    title: "Observe high priority tasks tackled in \n the cycle at a glance.",
     path: "/empty-state/active-cycle/priority",
   },
   [EmptyStateType.ACTIVE_CYCLE_ASSIGNEE_EMPTY_STATE]: {
     key: EmptyStateType.ACTIVE_CYCLE_ASSIGNEE_EMPTY_STATE,
-    title: "Add assignees to issues to see a \n breakdown of work by assignees.",
+    title: "Add assignees to tasks to see a \n breakdown of work by assignees.",
     path: "/empty-state/active-cycle/assignee",
   },
   [EmptyStateType.ACTIVE_CYCLE_LABEL_EMPTY_STATE]: {
     key: EmptyStateType.ACTIVE_CYCLE_LABEL_EMPTY_STATE,
-    title: "Add labels to issues to see the \n breakdown of work by labels.",
+    title: "Add labels to tasks to see the \n breakdown of work by labels.",
     path: "/empty-state/active-cycle/label",
   },
   [EmptyStateType.DISABLED_PROJECT_INBOX]: {
     key: EmptyStateType.DISABLED_PROJECT_INBOX,
     title: "Intake is not enabled for the project.",
     description:
-      "Intake helps you manage incoming requests to your project and add them as issues in your workflow. Enable intake \n from project settings to manage requests.",
+      "Intake helps you manage incoming requests to your project and add them as tasks in your workflow. Enable intake \n from project settings to manage requests.",
     accessType: "project",
     access: [EUserPermissions.ADMIN],
     path: "/empty-state/disabled-feature/intake",
@@ -721,7 +724,7 @@ const emptyStateDetails = {
     key: EmptyStateType.DISABLED_PROJECT_MODULE,
     title: "Modules are not enabled for the project.",
     description:
-      "A group of issues that belong to a logical, hierarchical parent form a module. Think of them as a way to track work by project milestones. Enable modules from project settings.",
+      "A group of tasks that belong to a logical, hierarchical parent form a module. Think of them as a way to track work by project milestones. Enable modules from project settings.",
     accessType: "project",
     access: [EUserPermissions.ADMIN],
     path: "/empty-state/disabled-feature/modules",
@@ -733,7 +736,7 @@ const emptyStateDetails = {
     key: EmptyStateType.DISABLED_PROJECT_PAGE,
     title: "Pages are not enabled for the project.",
     description:
-      "Pages are thought spotting space in Plane. Take down meeting notes, format them easily, embed issues, lay them out using a library of components, and keep them all in your project’s context. Enable the pages feature to start creating them in your project.",
+      "Pages are thought spotting space in Plane. Take down meeting notes, format them easily, embed tasks, lay them out using a library of components, and keep them all in your project’s context. Enable the pages feature to start creating them in your project.",
     accessType: "project",
     access: [EUserPermissions.ADMIN],
     path: "/empty-state/disabled-feature/pages",
@@ -755,31 +758,31 @@ const emptyStateDetails = {
   },
   [EmptyStateType.INBOX_SIDEBAR_OPEN_TAB]: {
     key: EmptyStateType.INBOX_SIDEBAR_OPEN_TAB,
-    title: "No open issues",
-    description: "Find open issues here. Create new issue.",
+    title: "No open tasks",
+    description: "Find open tasks here. Create new task.",
     path: "/empty-state/intake/intake-issue",
   },
   [EmptyStateType.INBOX_SIDEBAR_CLOSED_TAB]: {
     key: EmptyStateType.INBOX_SIDEBAR_CLOSED_TAB,
-    title: "No closed issues",
-    description: "All the issues whether accepted or \n declined can be found here.",
+    title: "No closed tasks",
+    description: "All the tasks whether accepted or \n declined can be found here.",
     path: "/empty-state/intake/intake-issue",
   },
   [EmptyStateType.INBOX_SIDEBAR_FILTER_EMPTY_STATE]: {
     key: EmptyStateType.INBOX_SIDEBAR_FILTER_EMPTY_STATE,
-    title: "No  matching issues",
-    description: "No issue matches filter applied in intake. \n Create a new issue.",
+    title: "No matching tasks",
+    description: "No task matches filter applied in intake. \n Create a new task.",
     path: "/empty-state/intake/filter-issue",
   },
   [EmptyStateType.INBOX_DETAIL_EMPTY_STATE]: {
     key: EmptyStateType.INBOX_DETAIL_EMPTY_STATE,
-    title: "Select an issue to view its details.",
+    title: "Select a task to view its details.",
     path: "/empty-state/intake/issue-detail",
   },
   [EmptyStateType.WORKSPACE_DRAFT_ISSUES]: {
     key: EmptyStateType.WORKSPACE_DRAFT_ISSUES,
-    title: "Half-written issues, and soon, comments will show up here.",
-    description: "To try this out, start adding an issue and leave it mid-way or create your first draft below. 😉",
+    title: "Half-written tasks, and soon, comments will show up here.",
+    description: "To try this out, start adding a task and leave it mid-way or create your first draft below. 😉",
     path: "/empty-state/workspace-draft/issue",
     primaryButton: {
       text: "Create your first draft",

@@ -20,13 +20,13 @@ const ProjectIssuesPage = observer(() => {
 
   // derived values
   const project = getProjectById(projectId.toString());
-  const pageTitle = project?.name ? `${project?.name} - Issues` : undefined;
+  const pageTitle = project?.name ? `${project?.name} - Tasks` : undefined;
 
   return (
     <>
       <PageHead title={pageTitle} />
       <Head>
-        <title>{project?.name} - Issues</title>
+        <title>{project?.name} - Tasks</title>
       </Head>
       <div className="h-full w-full">
         <ProjectLayoutRoot />

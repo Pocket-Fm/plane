@@ -131,7 +131,8 @@ export const ProjectViewIssuesHeader: React.FC = observer(() => {
   const viewDetails = viewId ? getViewById(viewId.toString()) : null;
 
   const canUserCreateIssue = allowPermissions(
-    [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
+    //[EUserPermissions.ADMIN, EUserPermissions.MEMBER],
+    [], // nobody can create issues
     EUserPermissionsLevel.PROJECT
   );
   const publishLink = getPublishViewLink(viewDetails?.anchor);
@@ -293,7 +294,7 @@ export const ProjectViewIssuesHeader: React.FC = observer(() => {
             }}
             size="sm"
           >
-            Add issue
+            Add task
           </Button>
         ) : (
           <></>

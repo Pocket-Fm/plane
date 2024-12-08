@@ -68,7 +68,7 @@ type Props = {
 
 const navigation = (workspaceSlug: string, projectId: string) => [
   {
-    name: "Issues",
+    name: "Tasks",
     href: `/${workspaceSlug}/projects/${projectId}/issues`,
     Icon: LayersIcon,
     access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
