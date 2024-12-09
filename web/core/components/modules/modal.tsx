@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { useForm } from "react-hook-form";
 // types
@@ -12,10 +12,9 @@ import { ModuleForm } from "@/components/modules";
 // constants
 import { MODULE_CREATED, MODULE_UPDATED } from "@/constants/event-tracker";
 // hooks
-import { useEventTracker, useIssues, useModule, useProject } from "@/hooks/store";
+import { useEventTracker, useModule, useProject } from "@/hooks/store";
 import { usePlatformOS } from "@/hooks/use-platform-os";
-import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
-import { useIssuesActions } from "@/hooks/use-issues-actions";
+import { StoreContext } from "@/lib/store-context";
 
 type Props = {
   isOpen: boolean;
@@ -56,12 +55,9 @@ export const CreateUpdateModuleModal: React.FC<Props> = observer((props) => {
   const { captureModuleEvent } = useEventTracker();
   const { workspaceProjectIds } = useProject();
   const { createModule, updateModuleDetails,  } = useModule();
-  const issueStoreType = useIssueStoreType();
-  const storeType = issueStoreType;
-  const { createIssue } = useIssuesActions(storeType);
-  const { issues } = useIssues(storeType);
-  const { fetchModuleDetails } = useModule();
   const { isMobile } = usePlatformOS();
+  const context = useContext(StoreContext);
+  const moduleIssues  = context.issue.moduleIssues;
 
   const handleClose = () => {
     reset(defaultValues);
@@ -72,12 +68,6 @@ export const CreateUpdateModuleModal: React.FC<Props> = observer((props) => {
     defaultValues,
   });
 
-  const addIssueToModule = async (issue: TIssue, moduleIds: string[]) => {
-    if (!workspaceSlug || !projectId) return;
-
-    await issues.changeModulesInIssue(workspaceSlug.toString(), projectId, issue.id, moduleIds, []);
-    moduleIds.forEach((moduleId) => fetchModuleDetails(workspaceSlug.toString(), projectId, moduleId));
-  };
 
   const handleCreateModule = async (payload: Partial<IModule>) => {
     if (!workspaceSlug || !projectId) return;
@@ -100,12 +90,8 @@ export const CreateUpdateModuleModal: React.FC<Props> = observer((props) => {
           project_id: projectId.toString(),
           module_ids: [res.id],
         };
-
-        if(createIssue){
-        const response = await createIssue(projectId.toString(), samplePayload);
-        if (!response) throw new Error();
-        await addIssueToModule(response, [res.id]);
-        }
+        // Automatically create a initialise default issues for the newly created module
+        await moduleIssues.createIssue(workspaceSlug.toString(), projectId.toString(), samplePayload,res.id);
       })
       .catch((err) => {
         setToast({
