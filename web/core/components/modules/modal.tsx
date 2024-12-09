@@ -90,7 +90,7 @@ export const CreateUpdateModuleModal: React.FC<Props> = observer((props) => {
           project_id: projectId.toString(),
           module_ids: [res.id],
         };
-        // Automatically create a initialise default issues for the newly created module
+        // Automatically initialise default issues for the newly created module
         await moduleIssues.createIssue(workspaceSlug.toString(), projectId.toString(), samplePayload,res.id);
       })
       .catch((err) => {
