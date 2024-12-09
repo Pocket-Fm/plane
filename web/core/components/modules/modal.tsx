@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { useForm } from "react-hook-form";
 // types
-import type { IModule } from "@plane/types";
+import type { IModule, TIssue } from "@plane/types";
 // ui
 import { EModalPosition, EModalWidth, ModalCore, TOAST_TYPE, setToast } from "@plane/ui";
 // components
@@ -12,8 +12,10 @@ import { ModuleForm } from "@/components/modules";
 // constants
 import { MODULE_CREATED, MODULE_UPDATED } from "@/constants/event-tracker";
 // hooks
-import { useEventTracker, useModule, useProject } from "@/hooks/store";
+import { useEventTracker, useIssues, useModule, useProject } from "@/hooks/store";
 import { usePlatformOS } from "@/hooks/use-platform-os";
+import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
+import { useIssuesActions } from "@/hooks/use-issues-actions";
 
 type Props = {
   isOpen: boolean;
@@ -31,6 +33,21 @@ const defaultValues: Partial<IModule> = {
   member_ids: [],
 };
 
+const BASE_ISSUE_PAYLOAD:Partial<TIssue>= {
+  type_id: null,
+  name: "test auto creation 1",
+  description_html: "<p class=\"editor-paragraph-block\">yesss</p>",
+  estimate_point: null,
+  state_id: "",
+  parent_id: null,
+  priority: "none",
+  assignee_ids: [],
+  label_ids: [],
+  cycle_id: null,
+  start_date: null,
+  target_date: null,
+} as const;
+
 export const CreateUpdateModuleModal: React.FC<Props> = observer((props) => {
   const { isOpen, onClose, data, workspaceSlug, projectId } = props;
   // states
@@ -38,7 +55,12 @@ export const CreateUpdateModuleModal: React.FC<Props> = observer((props) => {
   // store hooks
   const { captureModuleEvent } = useEventTracker();
   const { workspaceProjectIds } = useProject();
-  const { createModule, updateModuleDetails } = useModule();
+  const { createModule, updateModuleDetails,  } = useModule();
+  const issueStoreType = useIssueStoreType();
+  const storeType = issueStoreType;
+  const { createIssue } = useIssuesActions(storeType);
+  const { issues } = useIssues(storeType);
+  const { fetchModuleDetails } = useModule();
   const { isMobile } = usePlatformOS();
 
   const handleClose = () => {
@@ -50,12 +72,19 @@ export const CreateUpdateModuleModal: React.FC<Props> = observer((props) => {
     defaultValues,
   });
 
+  const addIssueToModule = async (issue: TIssue, moduleIds: string[]) => {
+    if (!workspaceSlug || !projectId) return;
+
+    await issues.changeModulesInIssue(workspaceSlug.toString(), projectId, issue.id, moduleIds, []);
+    moduleIds.forEach((moduleId) => fetchModuleDetails(workspaceSlug.toString(), projectId, moduleId));
+  };
+
   const handleCreateModule = async (payload: Partial<IModule>) => {
     if (!workspaceSlug || !projectId) return;
 
     const selectedProjectId = payload.project_id ?? projectId.toString();
     await createModule(workspaceSlug.toString(), selectedProjectId, payload)
-      .then((res) => {
+      .then(async (res) => {    
         handleClose();
         setToast({
           type: TOAST_TYPE.SUCCESS,
@@ -66,6 +95,17 @@ export const CreateUpdateModuleModal: React.FC<Props> = observer((props) => {
           eventName: MODULE_CREATED,
           payload: { ...res, state: "SUCCESS" },
         });
+        const samplePayload: Partial<TIssue> = {
+          ...BASE_ISSUE_PAYLOAD,
+          project_id: projectId.toString(),
+          module_ids: [res.id],
+        };
+
+        if(createIssue){
+        const response = await createIssue(projectId.toString(), samplePayload);
+        if (!response) throw new Error();
+        await addIssueToModule(response, [res.id]);
+        }
       })
       .catch((err) => {
         setToast({
