@@ -34,8 +34,8 @@ const defaultValues: Partial<IModule> = {
 
 const BASE_ISSUE_PAYLOAD:Partial<TIssue>= {
   type_id: null,
-  name: "test auto creation 1",
-  description_html: "<p class=\"editor-paragraph-block\">yesss</p>",
+  name: "Promo Name | Ideation Task",
+  description_html: "<p class=\"editor-paragraph-block\">Ideation task description</p>",
   estimate_point: null,
   state_id: "",
   parent_id: null,
