@@ -25,7 +25,8 @@ export const IssueDetailWidgetActionButtons: FC<Props> = (props) => {
         issueId={issueId}
         customButton={
           <IssueDetailWidgetButton
-            title="Add sub-issue"
+            //title="Add sub-issue"
+            title="Add review-comments/QC-notes"
             icon={<Layers className="h-3.5 w-3.5 flex-shrink-0" strokeWidth={2} />}
             disabled={disabled}
           />
