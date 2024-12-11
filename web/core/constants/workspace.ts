@@ -12,6 +12,9 @@ export const ROLE = {
   [EUserPermissions.GUEST]: "Guest",
   [EUserPermissions.MEMBER]: "Member",
   [EUserPermissions.ADMIN]: "Admin",
+  [EUserPermissions.WRITER]: "Writer",
+  [EUserPermissions.SE]: "SE",
+  [EUserPermissions.VOA]: "VOA",
 };
 
 export const ROLE_DETAILS = {

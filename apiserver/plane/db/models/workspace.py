@@ -10,7 +10,14 @@ from django.db import models
 from .base import BaseModel
 from plane.utils.constants import RESTRICTED_WORKSPACE_SLUGS
 
-ROLE_CHOICES = ((20, "Admin"), (15, "Member"), (5, "Guest"))
+ROLE_CHOICES = (
+    (20, "Admin"), 
+    (15, "Member"), 
+    (14, "Writer"), 
+    (13, "SE"), 
+    (12, "VOA"), 
+    (5, "Guest")
+)
 
 
 def get_default_props():

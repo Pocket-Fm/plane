@@ -14,7 +14,14 @@ from plane.db.mixins import AuditModel
 # Module imports
 from .base import BaseModel
 
-ROLE_CHOICES = ((20, "Admin"), (15, "Member"), (5, "Guest"))
+ROLE_CHOICES = (
+    (20, "Admin"), 
+    (15, "Member"), 
+    (14, "Writer"), 
+    (13, "SE"), 
+    (12, "VOA"), 
+    (5, "Guest")
+)
 
 
 def get_default_props():
