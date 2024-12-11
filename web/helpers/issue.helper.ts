@@ -17,7 +17,7 @@ import {
 } from "@plane/types";
 import { IGanttBlock } from "@/components/gantt-chart";
 // constants
-import { EIssueLayoutTypes, ISSUE_DISPLAY_FILTERS_BY_LAYOUT } from "@/constants/issue";
+import { EIssueLayoutTypes, EPromoIssueType, ISSUE_DISPLAY_FILTERS_BY_LAYOUT, PROMO_ISSUE_TYPE_NAME_SUFFIXES } from "@/constants/issue";
 import { STATE_GROUPS } from "@/constants/state";
 // helpers
 import { orderArrayBy } from "@/helpers/array.helper";
@@ -323,3 +323,17 @@ export const getIssuesShouldFallbackToServer = (queries: any) => {
 
   return false;
 };
+
+/**
+ * @description This method returns the promo issue type given an issue
+ * The logic can vary. Currently depends on Issue title.
+ * @param issue 
+ * @returns promo issue type enum
+ */
+export const getPromoIssueType = (issue?: TIssue): EPromoIssueType=> {
+  if (!issue) return EPromoIssueType.UNDEFINED;
+  for (const [promoIssueType,suffix] of Object.entries(PROMO_ISSUE_TYPE_NAME_SUFFIXES)) 
+    if (issue.name.includes(suffix))
+      return promoIssueType as EPromoIssueType;
+  return EPromoIssueType.UNDEFINED;
+}
