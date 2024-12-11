@@ -25,11 +25,12 @@ import {
 // helpers
 import { cn } from "@/helpers/common.helper";
 import { getDate, renderFormattedPayloadDate } from "@/helpers/date-time.helper";
-import { shouldHighlightIssueDueDate } from "@/helpers/issue.helper";
+import { getPromoIssueType, shouldHighlightIssueDueDate } from "@/helpers/issue.helper";
 import { useIssueDetail, useMember, useProject, useProjectState } from "@/hooks/store";
 // plane web components
 import { IssueAdditionalPropertyValuesUpdate } from "@/plane-web/components/issue-types/values";
 import { IssueWorklogProperty } from "@/plane-web/components/issues";
+import { ExtendedIssueProperties } from "../extensions/issue";
 
 interface IPeekOverviewProperties {
   workspaceSlug: string;
@@ -50,6 +51,7 @@ export const PeekOverviewProperties: FC<IPeekOverviewProperties> = observer((pro
   const { getUserDetails } = useMember();
   // derived values
   const issue = getIssueById(issueId);
+  const promoIssueType = getPromoIssueType(issue);
   if (!issue) return <></>;
   const createdByDetails = getUserDetails(issue?.created_by);
   const projectDetails = getProjectById(issue.project_id);
@@ -67,6 +69,8 @@ export const PeekOverviewProperties: FC<IPeekOverviewProperties> = observer((pro
       <h6 className="text-sm font-medium">Properties</h6>
       {/* TODO: render properties using a common component */}
       <div className={`w-full space-y-2 mt-3 ${disabled ? "opacity-60" : ""}`}>
+        <ExtendedIssueProperties issueProps={issue.props} promoIssueType={promoIssueType}/>
+   
         {/* state */}
         <div className="flex w-full items-center gap-3 h-8">
           <div className="flex items-center gap-1 w-1/4 flex-shrink-0 text-sm text-custom-text-300">

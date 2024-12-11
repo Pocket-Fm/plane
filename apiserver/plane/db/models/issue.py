@@ -169,6 +169,7 @@ class Issue(ProjectBaseModel):
         null=True,
         blank=True,
     )
+    props = models.JSONField(blank=True, default=dict)
 
     issue_objects = IssueManager()
 
