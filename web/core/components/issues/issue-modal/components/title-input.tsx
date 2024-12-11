@@ -63,6 +63,7 @@ export const IssueTitleInput: React.FC<TIssueTitleInputProps> = observer((props)
             className="w-full text-base"
             tabIndex={getIndex("name")}
             autoFocus
+            disabled={true}
           />
         )}
       />

@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { useForm } from "react-hook-form";
 // types
-import type { IModule } from "@plane/types";
+import type { IModule} from "@plane/types";
 // ui
 import { EModalPosition, EModalWidth, ModalCore, TOAST_TYPE, setToast } from "@plane/ui";
 // components
@@ -12,8 +12,10 @@ import { ModuleForm } from "@/components/modules";
 // constants
 import { MODULE_CREATED, MODULE_UPDATED } from "@/constants/event-tracker";
 // hooks
-import { useEventTracker, useModule, useProject } from "@/hooks/store";
+import { useEventTracker, useModule, useProject, useUser } from "@/hooks/store";
 import { usePlatformOS } from "@/hooks/use-platform-os";
+import { StoreContext } from "@/lib/store-context";
+import { createDefaultModuleIssues } from "./cms-helpers/create-default-issues";
 
 type Props = {
   isOpen: boolean;
@@ -38,8 +40,11 @@ export const CreateUpdateModuleModal: React.FC<Props> = observer((props) => {
   // store hooks
   const { captureModuleEvent } = useEventTracker();
   const { workspaceProjectIds } = useProject();
-  const { createModule, updateModuleDetails } = useModule();
+  const { createModule, updateModuleDetails,  } = useModule();
   const { isMobile } = usePlatformOS();
+  const context = useContext(StoreContext);
+  const moduleIssues  = context.issue.moduleIssues;
+  const { data: currentUser } = useUser();
 
   const handleClose = () => {
     reset(defaultValues);
@@ -50,12 +55,14 @@ export const CreateUpdateModuleModal: React.FC<Props> = observer((props) => {
     defaultValues,
   });
 
+
   const handleCreateModule = async (payload: Partial<IModule>) => {
     if (!workspaceSlug || !projectId) return;
+      payload.lead_id = currentUser?.id;
 
     const selectedProjectId = payload.project_id ?? projectId.toString();
     await createModule(workspaceSlug.toString(), selectedProjectId, payload)
-      .then((res) => {
+      .then(async (res) => {    
         handleClose();
         setToast({
           type: TOAST_TYPE.SUCCESS,
@@ -65,6 +72,15 @@ export const CreateUpdateModuleModal: React.FC<Props> = observer((props) => {
         captureModuleEvent({
           eventName: MODULE_CREATED,
           payload: { ...res, state: "SUCCESS" },
+        });
+        await createDefaultModuleIssues({
+          workspaceSlug: workspaceSlug.toString(),
+          projectId: projectId.toString(),
+          moduleId: res.id,
+          moduleName: payload.name ?? "",
+          createIssue: moduleIssues.createIssue,
+          userId: currentUser?.id ?? "",
+          ideationRequired : payload.ideation_required ?? false
         });
       })
       .catch((err) => {
