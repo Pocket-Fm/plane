@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
@@ -8,6 +8,7 @@ import {
   ArchiveRestoreIcon,
   CalendarClock,
   ChevronDown,
+  ChevronDownIcon,
   ChevronRight,
   Clapperboard,
   Info,
@@ -31,7 +32,9 @@ import {
   setToast,
   ArchiveIcon,
   TextArea,
-  Input
+  Input,
+  Dropdown,
+  Tooltip,
 } from "@plane/ui";
 // components
 import { DateRangeDropdown, MemberDropdown } from "@/components/dropdowns";
@@ -58,6 +61,8 @@ import { useAppRouter } from "@/hooks/use-app-router";
 // plane web constants
 import { EEstimateSystem } from "@/plane-web/constants/estimates";
 import { EUserPermissions, EUserPermissionsLevel } from "@/plane-web/constants/user-permissions";
+import { createFormatModuleIssues, FORMAT_CONFIG, getFormatDropdownOptions } from "../cms-helpers/create-default-issues";
+import { StoreContext } from "@/lib/store-context";
 
 const defaultValues: Partial<IModule> = {
   lead_id: "",
@@ -71,7 +76,11 @@ const defaultValues: Partial<IModule> = {
   team: "",
   format: "",
   parent_id: "",
-  opening_line: "",
+  voa_ids: [],
+  writer_ids: [],
+  se_ids: [],
+  sketch_artist_ids: [],
+  freeze_workflow: false,
 };
 
 type Props = {
@@ -90,6 +99,8 @@ export const ModuleAnalyticsSidebar: React.FC<Props> = observer((props) => {
   const [selectedLinkToUpdate, setSelectedLinkToUpdate] = useState<ILinkDetails | null>(null);
   // router
   const router = useAppRouter();
+  const context = useContext(StoreContext);
+  const moduleIssues = context.issue.moduleIssues;
   const { workspaceSlug, projectId } = useParams();
 
   // store hooks
@@ -110,11 +121,13 @@ export const ModuleAnalyticsSidebar: React.FC<Props> = observer((props) => {
   const estimateType = areEstimateEnabled && currentActiveEstimateId && estimateById(currentActiveEstimateId);
   const isEstimatePointValid = estimateType && estimateType?.type == EEstimateSystem.POINTS ? true : false;
 
-  const { reset, control } = useForm({
+  const { reset, control, watch } = useForm({
     defaultValues,
   });
+  const formatValue = watch("format");
+  const isWorkflowFreezed = watch("freeze_workflow");
 
-  const submitChanges = (data: Partial<IModule>) => {
+  const submitChanges = async (data: Partial<IModule>) => {
     if (!workspaceSlug || !projectId || !moduleId) return;
     updateModuleDetails(workspaceSlug.toString(), projectId.toString(), moduleId.toString(), data)
       .then((res) => {
@@ -129,6 +142,17 @@ export const ModuleAnalyticsSidebar: React.FC<Props> = observer((props) => {
           payload: { ...data, state: "FAILED" },
         });
       });
+
+    if (data.freeze_workflow) {
+      await createFormatModuleIssues({
+        workspaceSlug: workspaceSlug.toString(),
+        projectId: projectId.toString(),
+        moduleId: moduleId.toString(),
+        moduleName: moduleDetails?.name ?? "",
+        createIssue: moduleIssues.createIssue,
+        format: formatValue as keyof typeof FORMAT_CONFIG
+      });
+    }
   };
 
   const handleCreateLink = async (formData: ModuleLink) => {
@@ -273,10 +297,12 @@ export const ModuleAnalyticsSidebar: React.FC<Props> = observer((props) => {
       ? "0 Issue"
       : `${moduleDetails.completed_estimate_points}/${moduleDetails.total_estimate_points}`;
 
-  const isEditingAllowed = allowPermissions(
-    [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
-    EUserPermissionsLevel.PROJECT
-  );
+  // const isEditingAllowed = allowPermissions(
+  //   [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
+  //   EUserPermissionsLevel.PROJECT
+  // );
+
+  const isEditingAllowed = false
 
   return (
     <div className="relative">
@@ -375,9 +401,8 @@ export const ModuleAnalyticsSidebar: React.FC<Props> = observer((props) => {
                 <CustomSelect
                   customButton={
                     <span
-                      className={`flex h-6 w-20 items-center justify-center rounded-sm text-center text-xs ${
-                        isEditingAllowed && !isArchived ? "cursor-pointer" : "cursor-not-allowed"
-                      }`}
+                      className={`flex h-6 w-20 items-center justify-center rounded-sm text-center text-xs ${isEditingAllowed && !isArchived ? "cursor-pointer" : "cursor-not-allowed"
+                        }`}
                       style={{
                         color: moduleStatus ? moduleStatus.color : "#a3a3a2",
                         backgroundColor: moduleStatus ? `${moduleStatus.color}20` : "#a3a3a220",
@@ -405,6 +430,67 @@ export const ModuleAnalyticsSidebar: React.FC<Props> = observer((props) => {
             />
           </div>
           <h4 className="w-full break-words text-xl font-semibold text-custom-text-100">{moduleDetails.name}</h4>
+          <div className="flex items-center gap-2 py-4">
+            <Controller
+              control={control}
+              name="format"
+              render={({ field: { value, onChange } }) => (
+                <div className="h-7">
+                  <Dropdown
+                    value={value ?? ""}
+                    options={getFormatDropdownOptions()}
+                    buttonContent={(isOpen, value) =>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs">{value ? value : "Select Format"}</span>
+                        <ChevronDownIcon className={`h-4 w-4 ${isOpen ? "rotate-180" : ""}`} />
+                      </div>
+                    }
+                    buttonContainerClassName="border-[0.5px] px-2 rounded border-custom-border-300"
+                    keyExtractor={(item) => item.value}
+                    onChange={(val) => {
+                      onChange(val);
+                      submitChanges({ format: val });
+                    }}
+                    disableSearch
+                    disabled={isWorkflowFreezed}
+                  />
+                </div>
+              )}
+            />
+            <Controller
+              control={control}
+              name="freeze_workflow"
+              render={({ field: { value } }) => {
+                const getTooltipMessage = () => {
+                  if (value) return "Workflow is frozen and cannot be modified";
+                  if (!formatValue) return "Please select a format to freeze the workflow";
+                  return "Once frozen, the format and workflow cannot be changed";
+                };
+
+                return (
+                  <Tooltip
+                    tooltipContent={getTooltipMessage()}
+                    position="top"
+                  >
+                    <div className="h-7 flex items-center gap-2 border-[0.5px] px-2 rounded border-red-500 bg-red-50">
+                      <span className="text-xs text-red-500 font-medium">Freeze Workflow</span>
+                      <input
+                        type="checkbox"
+                        checked={value}
+                        onChange={(e) => {
+                          if (!value) {
+                            submitChanges({ freeze_workflow: e.target.checked });
+                          }
+                        }}
+                        className="h-3 w-3 accent-red-500"
+                        // disabled={value || !formatValue}
+                      />
+                    </div>
+                  </Tooltip>
+                );
+              }}
+            />
+          </div>
         </div>
 
         {moduleDetails.description && (
@@ -486,7 +572,7 @@ export const ModuleAnalyticsSidebar: React.FC<Props> = observer((props) => {
             />
           </div>
 
-          <div className="flex items-center justify-start gap-1">
+          {/* <div className="flex items-center justify-start gap-1">
             <div className="flex w-2/5 items-center justify-start gap-2 text-custom-text-300">
               <Users className="h-4 w-4" />
               <span className="text-base">Members</span>
@@ -510,7 +596,113 @@ export const ModuleAnalyticsSidebar: React.FC<Props> = observer((props) => {
                 </div>
               )}
             />
-          </div>
+          </div> */}
+          {formatValue && <>
+            <div className="flex items-center justify-start gap-1">
+              <div className="flex w-2/5 items-center justify-start gap-2 text-custom-text-300">
+                <Users className="h-4 w-4" />
+                <span className="text-base">Writers</span>
+              </div>
+              <Controller
+                control={control}
+                name="writer_ids"
+                render={({ field: { value } }) => (
+                  <div className="h-7 w-3/5">
+                    <MemberDropdown
+                      value={value ?? []}
+                      onChange={(val: string[]) => {
+                        submitChanges({ writer_ids: val });
+                      }}
+                      multiple
+                      projectId={projectId?.toString() ?? ""}
+                      buttonVariant={value && value?.length > 0 ? "transparent-without-text" : "background-with-text"}
+                      buttonClassName={value && value.length > 0 ? "hover:bg-transparent px-0" : ""}
+                      disabled={!isEditingAllowed || isArchived}
+                      placeholder="Writers"
+                    />
+                  </div>
+                )}
+              />
+            </div>
+            <div className="flex items-center justify-start gap-1">
+              <div className="flex w-2/5 items-center justify-start gap-2 text-custom-text-300">
+                <Users className="h-4 w-4" />
+                <span className="text-base">VOA</span>
+              </div>
+              <Controller
+                control={control}
+                name="voa_ids"
+                render={({ field: { value } }) => (
+                  <div className="h-7 w-3/5">
+                    <MemberDropdown
+                      value={value ?? []}
+                      onChange={(val: string[]) => {
+                        submitChanges({ voa_ids: val });
+                      }}
+                      multiple
+                      projectId={projectId?.toString() ?? ""}
+                      buttonVariant={value && value?.length > 0 ? "transparent-without-text" : "background-with-text"}
+                      buttonClassName={value && value.length > 0 ? "hover:bg-transparent px-0" : ""}
+                      disabled={!isEditingAllowed || isArchived}
+                      placeholder="VOA"
+                    />
+                  </div>
+                )}
+              />
+            </div>
+            <div className="flex items-center justify-start gap-1">
+              <div className="flex w-2/5 items-center justify-start gap-2 text-custom-text-300">
+                <Users className="h-4 w-4" />
+                <span className="text-base">SE</span>
+              </div>
+              <Controller
+                control={control}
+                name="se_ids"
+                render={({ field: { value } }) => (
+                  <div className="h-7 w-3/5">
+                    <MemberDropdown
+                      value={value ?? []}
+                      onChange={(val: string[]) => {
+                        submitChanges({ se_ids: val });
+                      }}
+                      multiple
+                      projectId={projectId?.toString() ?? ""}
+                      buttonVariant={value && value?.length > 0 ? "transparent-without-text" : "background-with-text"}
+                      buttonClassName={value && value.length > 0 ? "hover:bg-transparent px-0" : ""}
+                      disabled={!isEditingAllowed || isArchived}
+                      placeholder="SE"
+                    />
+                  </div>
+                )}
+              />
+            </div>
+            {formatValue === 'sketch' && <div className="flex items-center justify-start gap-1">
+              <div className="flex w-2/5 items-center justify-start gap-2 text-custom-text-300">
+                <Users className="h-4 w-4" />
+                <span className="text-base">Sketch Artist</span>
+              </div>
+              <Controller
+                control={control}
+                name="sketch_artist_ids"
+                render={({ field: { value } }) => (
+                  <div className="h-7 w-3/5">
+                    <MemberDropdown
+                      value={value ?? []}
+                      onChange={(val: string[]) => {
+                        submitChanges({ sketch_artist_ids: val });
+                      }}
+                      multiple
+                      projectId={projectId?.toString() ?? ""}
+                      buttonVariant={value && value?.length > 0 ? "transparent-without-text" : "background-with-text"}
+                      buttonClassName={value && value.length > 0 ? "hover:bg-transparent px-0" : ""}
+                      disabled={!isEditingAllowed || isArchived}
+                      placeholder="Sketch Artist"
+                    />
+                  </div>
+                )}
+              />
+            </div>}
+          </>}
 
           <div className="flex items-center justify-start gap-1">
             <div className="flex w-2/5 items-center justify-start gap-2 text-custom-text-300">
@@ -559,29 +751,6 @@ export const ModuleAnalyticsSidebar: React.FC<Props> = observer((props) => {
             />
           </div>
 
-          <div className="flex items-center justify-start gap-1">
-            <div className="flex w-2/5 items-center justify-start gap-2 text-custom-text-300">
-              <Clapperboard className="h-4 w-4" />
-              <span className="text-base">Opening Line</span>
-            </div>
-            <Controller
-              control={control}
-              name="show_id"
-              render={({ field: { value } }) => (
-                <div className="h-7 w-3/5">
-                  <Input
-                    id="opening_line"
-                    name="opening_line"
-                    type="text"
-                    value={value}
-                    placeholder="Promo Opening line"
-                    className="w-full cursor-not-allowed !text-custom-text-400"
-                    autoComplete="on"
-                  />
-                </div>
-              )}
-            />
-          </div>
           <div className="flex items-center justify-start gap-1">
             <div className="flex w-2/5 items-center justify-start gap-2 text-custom-text-300">
               <LayersIcon className="h-4 w-4" />

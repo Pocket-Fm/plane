@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { useForm } from "react-hook-form";
 // types
-import type { IModule, TIssue } from "@plane/types";
+import type { IModule} from "@plane/types";
 // ui
 import { EModalPosition, EModalWidth, ModalCore, TOAST_TYPE, setToast } from "@plane/ui";
 // components
@@ -12,9 +12,10 @@ import { ModuleForm } from "@/components/modules";
 // constants
 import { MODULE_CREATED, MODULE_UPDATED } from "@/constants/event-tracker";
 // hooks
-import { useEventTracker, useModule, useProject } from "@/hooks/store";
+import { useEventTracker, useModule, useProject, useUser } from "@/hooks/store";
 import { usePlatformOS } from "@/hooks/use-platform-os";
 import { StoreContext } from "@/lib/store-context";
+import { createDefaultModuleIssues } from "./cms-helpers/create-default-issues";
 
 type Props = {
   isOpen: boolean;
@@ -32,21 +33,6 @@ const defaultValues: Partial<IModule> = {
   member_ids: [],
 };
 
-const BASE_ISSUE_PAYLOAD:Partial<TIssue>= {
-  type_id: null,
-  name: "Promo Name | Ideation Task",
-  description_html: "<p class=\"editor-paragraph-block\">Ideation task description</p>",
-  estimate_point: null,
-  state_id: "",
-  parent_id: null,
-  priority: "none",
-  assignee_ids: [],
-  label_ids: [],
-  cycle_id: null,
-  start_date: null,
-  target_date: null,
-} as const;
-
 export const CreateUpdateModuleModal: React.FC<Props> = observer((props) => {
   const { isOpen, onClose, data, workspaceSlug, projectId } = props;
   // states
@@ -58,6 +44,7 @@ export const CreateUpdateModuleModal: React.FC<Props> = observer((props) => {
   const { isMobile } = usePlatformOS();
   const context = useContext(StoreContext);
   const moduleIssues  = context.issue.moduleIssues;
+  const { data: currentUser } = useUser();
 
   const handleClose = () => {
     reset(defaultValues);
@@ -71,6 +58,7 @@ export const CreateUpdateModuleModal: React.FC<Props> = observer((props) => {
 
   const handleCreateModule = async (payload: Partial<IModule>) => {
     if (!workspaceSlug || !projectId) return;
+      payload.lead_id = currentUser?.id;
 
     const selectedProjectId = payload.project_id ?? projectId.toString();
     await createModule(workspaceSlug.toString(), selectedProjectId, payload)
@@ -85,13 +73,15 @@ export const CreateUpdateModuleModal: React.FC<Props> = observer((props) => {
           eventName: MODULE_CREATED,
           payload: { ...res, state: "SUCCESS" },
         });
-        const samplePayload: Partial<TIssue> = {
-          ...BASE_ISSUE_PAYLOAD,
-          project_id: projectId.toString(),
-          module_ids: [res.id],
-        };
-        // Automatically initialise default issues for the newly created module
-        await moduleIssues.createIssue(workspaceSlug.toString(), projectId.toString(), samplePayload,res.id);
+        await createDefaultModuleIssues({
+          workspaceSlug: workspaceSlug.toString(),
+          projectId: projectId.toString(),
+          moduleId: res.id,
+          moduleName: payload.name ?? "",
+          createIssue: moduleIssues.createIssue,
+          userId: currentUser?.id ?? "",
+          ideationRequired : payload.ideation_required ?? false
+        });
       })
       .catch((err) => {
         setToast({
