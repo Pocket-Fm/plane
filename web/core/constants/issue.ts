@@ -60,6 +60,12 @@ export enum EIssueCommentAccessSpecifier {
   INTERNAL = "INTERNAL",
 }
 
+export enum EPromoIssueType {
+  IDEATION = "IDEATION",
+  SCRIPT_WRITING = "SCRIPT_WRITING",
+  UNDEFINED = "UNDEFINED",
+}
+
 export const ISSUE_PRIORITIES: {
   key: TIssuePriorities;
   title: string;
@@ -147,6 +153,45 @@ export const ISSUE_DISPLAY_PROPERTIES: {
   { key: "modules", title: "Modules" },
   { key: "cycle", title: "Cycle" },
 ];
+
+export const PROMO_ISSUE_TYPE_NAME_SUFFIXES :Record<EPromoIssueType,string> = {
+  [EPromoIssueType.IDEATION]: "Ideation",
+  [EPromoIssueType.SCRIPT_WRITING]: "Script Writing",
+  [EPromoIssueType.UNDEFINED]: "",
+};
+
+export const PROMO_ISSUE_EXTENDED_PROPERTIES: Record<EPromoIssueType,Record<"key"|"type"|"title",string>[]> = {
+  [EPromoIssueType.IDEATION]: [
+    {
+      key: "ideation_start",
+      type: "text",
+      title: "Ideation Start",
+    },
+    {
+      key: "ideation_mid",
+      type: "text",
+      title: "Ideation Mid",
+    },
+    {
+      key: "ideation_end",
+      type: "text",
+      title: "Ideation End",
+    },
+  ],
+  [EPromoIssueType.SCRIPT_WRITING]: [
+    {
+      key: "script_writing_opening_line",
+      type: "text",
+      title: "Script Opening Line",
+    },
+    {
+      key: "script_writing_end_line",
+      type: "text",
+      title: "Script End line",
+    },
+  ],
+  [EPromoIssueType.UNDEFINED]: [],
+};
 
 export const ISSUE_EXTRA_OPTIONS: {
   key: TIssueExtraOptions;

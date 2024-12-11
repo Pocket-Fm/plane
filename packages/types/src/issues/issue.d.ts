@@ -39,6 +39,8 @@ export type TBaseIssue = {
   updated_by: string;
 
   is_draft: boolean;
+
+  props: Record<string, string|number>; //TODO: limit the keys to a fixed set.
 };
 
 export type IssueRelation = {
