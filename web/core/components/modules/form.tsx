@@ -15,6 +15,7 @@ import { getDate, renderFormattedPayloadDate } from "@/helpers/date-time.helper"
 import { shouldRenderProject } from "@/helpers/project.helper";
 import { getTabIndex } from "@/helpers/tab-indices.helper";
 import { ChevronDownIcon } from "lucide-react";
+import { getFormatDropdownOptions } from "./cms-helpers/create-default-issues";
 // types
 
 type Props = {
@@ -33,6 +34,19 @@ const defaultValues: Partial<IModule> = {
   status: "backlog",
   lead_id: null,
   member_ids: [],
+  // promo attrs
+  show_id: "",
+  original_show_id: "",
+  team: "",
+  format: "",
+  parent_id: "",
+  voa_ids: [],
+  writer_ids: [],
+  se_ids: [],
+  sketch_artist_ids: [],
+  creative_lead_id: "",
+  ideation_required: false,
+
 };
 
 export const ModuleForm: React.FC<Props> = (props) => {
@@ -43,6 +57,7 @@ export const ModuleForm: React.FC<Props> = (props) => {
     handleSubmit,
     control,
     reset,
+    watch,
   } = useForm<IModule>({
     defaultValues: {
       project_id: projectId,
@@ -51,8 +66,22 @@ export const ModuleForm: React.FC<Props> = (props) => {
       status: data?.status || "backlog",
       lead_id: data?.lead_id || null,
       member_ids: data?.member_ids || [],
+      // promo attrs
+      show_id: data?.show_id || "",
+      original_show_id: data?.original_show_id || "",
+      format: data?.format || "",
+      voa_ids: data?.voa_ids || [],
+      writer_ids: data?.writer_ids || [],
+      se_ids: data?.se_ids || [],
+      sketch_artist_ids: data?.sketch_artist_ids || [],
+      creative_lead_id: data?.creative_lead_id || "",
+      ideation_required: data?.ideation_required || false,
+      freeze_workflow: data?.freeze_workflow || false,
     },
   });
+
+  const formatValue = watch("format");
+  const isWorkflowFreezed = watch("freeze_workflow");
 
   const { getIndex } = getTabIndex(ETabIndices.PROJECT_MODULE, isMobile);
 
@@ -96,35 +125,46 @@ export const ModuleForm: React.FC<Props> = (props) => {
             />
           )}
           <h3 className="text-xl font-medium text-custom-text-200">{status ? "Update" : "Create"} promo</h3>
-            <Controller
-              control={control}
-              name="format"
-              render={({ field: { value, onChange } }) => (
-                <div className="h-7">
-                  <Dropdown
-                    value={value}
-                    options={[
-                      { data: "Thumbnail", value: "thumbnail" },
-                      { data: "Gen AI", value: "genai" },
-                      { data: "Live Action", value: "live_action" },
-                      { data: "Animation", value: "animation" },
-                      { data: "Sketch", value: "sketch" },
-                    ]}
-                    buttonContent={(isOpen, value)=>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs">{value?value:"Select Format"}</span>
-                          <ChevronDownIcon className={`h-4 w-4 ${isOpen ? "rotate-180" : ""}`} />
-                        </div>
-                    }
-                    buttonContainerClassName="border-[0.5px] px-2 rounded border-custom-border-300"
-                    keyExtractor={(item) => item.value}
-                    onChange={onChange}
-                    tabIndex={getIndex("format")}
-                    disableSearch
-                  />
-                </div>
-              )}
-            />
+          <Controller
+            control={control}
+            name="format"
+            render={({ field: { value, onChange } }) => (
+              <div className="h-7">
+                <Dropdown
+                  value={value}
+                  options={getFormatDropdownOptions()}
+                  buttonContent={(isOpen, value) =>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs">{value ? value : "Select Format"}</span>
+                      <ChevronDownIcon className={`h-4 w-4 ${isOpen ? "rotate-180" : ""}`} />
+                    </div>
+                  }
+                  buttonContainerClassName="border-[0.5px] px-2 rounded border-custom-border-300"
+                  keyExtractor={(item) => item.value}
+                  onChange={onChange}
+                  tabIndex={getIndex("format")}
+                  disableSearch
+                  disabled={isWorkflowFreezed}
+                />
+              </div>
+            )}
+          />
+          {!data && <Controller
+            control={control}
+            name="ideation_required"
+            render={({ field: { value, onChange } }) => (
+              <div className="h-7 flex items-center gap-2 border-[0.5px] px-2 rounded border-custom-border-300">
+                <span className="text-xs">Ideation Required</span>
+                <input
+                  type="checkbox"
+                  checked={value}
+                  onChange={(e) => onChange(e.target.checked)}
+                  tabIndex={getIndex("ideation_required")}
+                  className="h-3 w-3"
+                />
+              </div>
+            )}
+          />}
         </div>
         <div className="space-y-3">
           <div className="space-y-1">
@@ -217,7 +257,7 @@ export const ModuleForm: React.FC<Props> = (props) => {
             <span className="text-xs text-red-500">{errors?.name?.message}</span>
           </div>
 
-          <div>
+          {/* <div>
             <Controller
               control={control}
               name="opening_line"
@@ -236,7 +276,7 @@ export const ModuleForm: React.FC<Props> = (props) => {
                 />
               )}
             />
-          </div>
+          </div> */}
 
           <div className="flex flex-wrap items-center gap-2">
             <Controller
@@ -276,6 +316,23 @@ export const ModuleForm: React.FC<Props> = (props) => {
             </div>
             <Controller
               control={control}
+              name="creative_lead_id"
+              render={({ field: { value, onChange } }) => (
+                <div className="h-7">
+                  <MemberDropdown
+                    value={value}
+                    onChange={onChange}
+                    projectId={projectId}
+                    multiple={false}
+                    buttonVariant="border-with-text"
+                    placeholder="Creative Lead"
+                    tabIndex={getIndex("creative_lead_id")}
+                  />
+                </div>
+              )}
+            />
+            {/* <Controller
+              control={control}
               name="lead_id"
               render={({ field: { value, onChange } }) => (
                 <div className="h-7">
@@ -290,8 +347,8 @@ export const ModuleForm: React.FC<Props> = (props) => {
                   />
                 </div>
               )}
-            />
-            <Controller
+            /> */}
+            {/* <Controller
               control={control}
               name="member_ids"
               render={({ field: { value, onChange } }) => (
@@ -308,7 +365,112 @@ export const ModuleForm: React.FC<Props> = (props) => {
                   />
                 </div>
               )}
+            /> */}
+            <Controller
+              control={control}
+              name="writer_ids"
+              rules={{
+                required: "Writers is required",
+              }}
+              render={({ field: { value, onChange } }) => (
+                <div className="h-7">
+                  <MemberDropdown
+                    value={value}
+                    onChange={onChange}
+                    projectId={projectId}
+                    multiple
+                    buttonVariant={value && value.length > 0 ? "transparent-without-text" : "border-with-text"}
+                    buttonClassName={value && value.length > 0 ? "hover:bg-transparent px-0" : ""}
+                    placeholder="Writers"
+                    tabIndex={getIndex("writer_ids")}
+                  />
+                </div>
+              )}
             />
+            {formatValue && <>
+              <Controller
+                control={control}
+                name="voa_ids"
+                rules={{
+                  validate: (value) => {
+                    if (!value || value.length === 0) {
+                      return "VOA is required for any format";
+                    }
+                    return true;
+                  }
+                }}
+                render={({ field: { value, onChange } }) => (
+                  <div className="h-7">
+                    <MemberDropdown
+                      value={value}
+                      onChange={onChange}
+                      projectId={projectId}
+                      multiple
+                      buttonVariant={value && value.length > 0 ? "transparent-without-text" : "border-with-text"}
+                      buttonClassName={value && value.length > 0 ? "hover:bg-transparent px-0" : ""}
+                      placeholder="VOA"
+                      tabIndex={getIndex("voa_ids")}
+                    />
+                  </div>
+                )}
+              />
+
+              <Controller
+                control={control}
+                name="se_ids"
+                rules={{
+                  validate: (value) => {
+                    if (!value || value.length === 0) {
+                      return "SE is required for any format";
+                    }
+                    return true;
+                  }
+                }}
+                render={({ field: { value, onChange } }) => (
+                  <div className="h-7">
+                    <MemberDropdown
+                      value={value}
+                      onChange={onChange}
+                      projectId={projectId}
+                      multiple
+                      buttonVariant={value && value.length > 0 ? "transparent-without-text" : "border-with-text"}
+                      buttonClassName={value && value.length > 0 ? "hover:bg-transparent px-0" : ""}
+                      placeholder="SE"
+                      tabIndex={getIndex("se_ids")}
+                    />
+                  </div>
+                )}
+              />
+              {formatValue === 'sketch' && (
+                <Controller
+                  control={control}
+                  name="sketch_artist_ids"
+                  rules={{
+                    validate: (value) => {
+                      if (!value || value.length === 0) {
+                        return "Sketch Artist is required for sketch format";
+                      }
+                      return true;
+                    }
+                  }}
+                  render={({ field: { value, onChange } }) => (
+                    <div className="h-7">
+                      <MemberDropdown
+                        value={value}
+                        onChange={onChange}
+                        projectId={projectId}
+                        multiple
+                        buttonVariant={value && value.length > 0 ? "transparent-without-text" : "border-with-text"}
+                        buttonClassName={value && value.length > 0 ? "hover:bg-transparent px-0" : ""}
+                        placeholder="Sketch Artist"
+                        tabIndex={getIndex("sketch_artist_ids")}
+                      />
+                    </div>
+                  )}
+                />
+              )}
+            </>}
+
           </div>
         </div>
       </div>

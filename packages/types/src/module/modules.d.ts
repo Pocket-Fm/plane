@@ -97,7 +97,13 @@ export interface IModule {
   team: string;
   format: string;
   parent_id: string;
-  opening_line: string;
+  voa_ids: string[];
+  ideation_required?: boolean;
+  writer_ids: string[];
+  se_ids: string[];
+  sketch_artist_ids: string[];
+  creative_lead_id: string;
+  freeze_workflow: boolean;
 }
 
 export interface ModuleIssueResponse {
