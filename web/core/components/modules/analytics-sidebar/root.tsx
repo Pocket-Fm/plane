@@ -35,6 +35,7 @@ import {
   Input,
   Dropdown,
   Tooltip,
+  Button,
 } from "@plane/ui";
 // components
 import { DateRangeDropdown, MemberDropdown } from "@/components/dropdowns";
@@ -56,15 +57,22 @@ import { MODULE_STATUS } from "@/constants/module";
 import { getDate, renderFormattedPayloadDate } from "@/helpers/date-time.helper";
 import { copyUrlToClipboard } from "@/helpers/string.helper";
 // hooks
-import { useModule, useEventTracker, useProjectEstimates, useUserPermissions } from "@/hooks/store";
+import { useModule, useEventTracker, useProjectEstimates, useUserPermissions, useMember } from "@/hooks/store";
 import { useAppRouter } from "@/hooks/use-app-router";
 // plane web constants
 import { EEstimateSystem } from "@/plane-web/constants/estimates";
 import { EUserPermissions, EUserPermissionsLevel } from "@/plane-web/constants/user-permissions";
 import { createFormatModuleIssues, FORMAT_CONFIG, getFormatDropdownOptions } from "../cms-helpers/create-default-issues";
 import { StoreContext } from "@/lib/store-context";
+import { concat, difference } from "lodash";
 
-const defaultValues: Partial<IModule> = {
+type TModuleForm = Partial<IModule> & {
+  writer_member_ids: string[],
+  voa_member_ids: string[],
+  se_member_ids: string[],
+};
+
+const defaultValues: TModuleForm = {
   lead_id: "",
   member_ids: [],
   start_date: null,
@@ -76,11 +84,9 @@ const defaultValues: Partial<IModule> = {
   team: "",
   format: "",
   parent_id: "",
-  voa_ids: [],
-  writer_ids: [],
-  se_ids: [],
-  sketch_artist_ids: [],
-  freeze_workflow: false,
+  writer_member_ids: [],
+  voa_member_ids: [],
+  se_member_ids: [],
 };
 
 type Props = {
@@ -125,7 +131,13 @@ export const ModuleAnalyticsSidebar: React.FC<Props> = observer((props) => {
     defaultValues,
   });
   const formatValue = watch("format");
-  const isWorkflowFreezed = watch("freeze_workflow");
+  const isWorkflowFreezed = moduleIssues.getIssueIds() && moduleIssues.getIssueIds()!.length > 2;
+
+  // members: writers, se, voa
+  const [writerIds, setWriterIds] = useState<string[]>([]);
+  const [seIds, setSeIds] = useState<string[]>([]);
+  const [voaIds, setVoaIds] = useState<string[]>([]);
+  const {project: {getProjectMemberDetails}} = useMember()
 
   const submitChanges = async (data: Partial<IModule>) => {
     if (!workspaceSlug || !projectId || !moduleId) return;
@@ -143,6 +155,7 @@ export const ModuleAnalyticsSidebar: React.FC<Props> = observer((props) => {
         });
       });
 
+    /*
     if (data.freeze_workflow) {
       await createFormatModuleIssues({
         workspaceSlug: workspaceSlug.toString(),
@@ -153,6 +166,7 @@ export const ModuleAnalyticsSidebar: React.FC<Props> = observer((props) => {
         format: formatValue as keyof typeof FORMAT_CONFIG
       });
     }
+    */
   };
 
   const handleCreateLink = async (formData: ModuleLink) => {
@@ -261,10 +275,14 @@ export const ModuleAnalyticsSidebar: React.FC<Props> = observer((props) => {
   };
 
   useEffect(() => {
-    if (moduleDetails)
+    if (moduleDetails && moduleDetails.member_ids)
       reset({
         ...moduleDetails,
+        writer_member_ids: moduleDetails.member_ids?.filter((id) => getProjectMemberDetails(id)?.role == EUserPermissions.WRITER),
+        se_member_ids: moduleDetails.member_ids?.filter((id) => getProjectMemberDetails(id)?.role == EUserPermissions.SE),
+        voa_member_ids: moduleDetails.member_ids?.filter((id) => getProjectMemberDetails(id)?.role == EUserPermissions.VOA),
       });
+    else if (moduleDetails) reset({...moduleDetails});
   }, [moduleDetails, reset]);
 
   const handleEditLink = (link: ILinkDetails) => {
@@ -297,12 +315,11 @@ export const ModuleAnalyticsSidebar: React.FC<Props> = observer((props) => {
       ? "0 Issue"
       : `${moduleDetails.completed_estimate_points}/${moduleDetails.total_estimate_points}`;
 
-  // const isEditingAllowed = allowPermissions(
-  //   [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
-  //   EUserPermissionsLevel.PROJECT
-  // );
+  const isEditingAllowed = allowPermissions(
+    [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
+    EUserPermissionsLevel.PROJECT
+  );
 
-  const isEditingAllowed = false
 
   return (
     <div className="relative">
@@ -457,39 +474,20 @@ export const ModuleAnalyticsSidebar: React.FC<Props> = observer((props) => {
                 </div>
               )}
             />
-            <Controller
-              control={control}
-              name="freeze_workflow"
-              render={({ field: { value } }) => {
-                const getTooltipMessage = () => {
-                  if (value) return "Workflow is frozen and cannot be modified";
-                  if (!formatValue) return "Please select a format to freeze the workflow";
-                  return "Once frozen, the format and workflow cannot be changed";
-                };
-
-                return (
-                  <Tooltip
-                    tooltipContent={getTooltipMessage()}
-                    position="top"
-                  >
-                    <div className="h-7 flex items-center gap-2 border-[0.5px] px-2 rounded border-red-500 bg-red-50">
-                      <span className="text-xs text-red-500 font-medium">Freeze Workflow</span>
-                      <input
-                        type="checkbox"
-                        checked={value}
-                        onChange={(e) => {
-                          if (!value) {
-                            submitChanges({ freeze_workflow: e.target.checked });
-                          }
-                        }}
-                        className="h-3 w-3 accent-red-500"
-                        // disabled={value || !formatValue}
-                      />
-                    </div>
-                  </Tooltip>
-                );
-              }}
-            />
+            <Button 
+              variant="danger" 
+              onClick={async () => 
+                    await createFormatModuleIssues({
+                      workspaceSlug: workspaceSlug.toString(),
+                      projectId: projectId.toString(),
+                      moduleId: moduleId.toString(),
+                      moduleName: moduleDetails?.name ?? "",
+                      createIssue: moduleIssues.createIssue,
+                      format: formatValue as keyof typeof FORMAT_CONFIG
+                    })
+              } 
+              disabled={isWorkflowFreezed}
+            >Freeze Workflow</Button>
           </div>
         </div>
 
@@ -605,16 +603,19 @@ export const ModuleAnalyticsSidebar: React.FC<Props> = observer((props) => {
               </div>
               <Controller
                 control={control}
-                name="writer_ids"
+                name="writer_member_ids"
                 render={({ field: { value } }) => (
                   <div className="h-7 w-3/5">
                     <MemberDropdown
                       value={value ?? []}
                       onChange={(val: string[]) => {
-                        submitChanges({ writer_ids: val });
+                        const memberIds = concat(difference(moduleDetails.member_ids, writerIds) , val);
+                        submitChanges({ member_ids: memberIds });
+                        setWriterIds(val);
                       }}
                       multiple
                       projectId={projectId?.toString() ?? ""}
+                      projectRole={EUserPermissions.WRITER}
                       buttonVariant={value && value?.length > 0 ? "transparent-without-text" : "background-with-text"}
                       buttonClassName={value && value.length > 0 ? "hover:bg-transparent px-0" : ""}
                       disabled={!isEditingAllowed || isArchived}
@@ -631,16 +632,19 @@ export const ModuleAnalyticsSidebar: React.FC<Props> = observer((props) => {
               </div>
               <Controller
                 control={control}
-                name="voa_ids"
+                name="voa_member_ids"
                 render={({ field: { value } }) => (
                   <div className="h-7 w-3/5">
                     <MemberDropdown
                       value={value ?? []}
                       onChange={(val: string[]) => {
-                        submitChanges({ voa_ids: val });
+                        const memberIds = concat(difference(moduleDetails.member_ids, voaIds) , val);
+                        submitChanges({ member_ids: memberIds });
+                        setVoaIds(val);
                       }}
                       multiple
                       projectId={projectId?.toString() ?? ""}
+                      projectRole={EUserPermissions.VOA}
                       buttonVariant={value && value?.length > 0 ? "transparent-without-text" : "background-with-text"}
                       buttonClassName={value && value.length > 0 ? "hover:bg-transparent px-0" : ""}
                       disabled={!isEditingAllowed || isArchived}
@@ -657,16 +661,19 @@ export const ModuleAnalyticsSidebar: React.FC<Props> = observer((props) => {
               </div>
               <Controller
                 control={control}
-                name="se_ids"
+                name="se_member_ids"
                 render={({ field: { value } }) => (
                   <div className="h-7 w-3/5">
                     <MemberDropdown
                       value={value ?? []}
                       onChange={(val: string[]) => {
-                        submitChanges({ se_ids: val });
+                        const memberIds = concat(difference(moduleDetails.member_ids, seIds) , val);
+                        submitChanges({ member_ids: memberIds });
+                        setSeIds(val);
                       }}
                       multiple
                       projectId={projectId?.toString() ?? ""}
+                      projectRole={EUserPermissions.SE}
                       buttonVariant={value && value?.length > 0 ? "transparent-without-text" : "background-with-text"}
                       buttonClassName={value && value.length > 0 ? "hover:bg-transparent px-0" : ""}
                       disabled={!isEditingAllowed || isArchived}
@@ -676,6 +683,7 @@ export const ModuleAnalyticsSidebar: React.FC<Props> = observer((props) => {
                 )}
               />
             </div>
+            {/* IM SORRY, removing sketch artist for now
             {formatValue === 'sketch' && <div className="flex items-center justify-start gap-1">
               <div className="flex w-2/5 items-center justify-start gap-2 text-custom-text-300">
                 <Users className="h-4 w-4" />
@@ -702,6 +710,7 @@ export const ModuleAnalyticsSidebar: React.FC<Props> = observer((props) => {
                 )}
               />
             </div>}
+            */}
           </>}
 
           <div className="flex items-center justify-start gap-1">

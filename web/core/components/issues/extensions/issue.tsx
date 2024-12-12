@@ -5,8 +5,8 @@ import { TIssue } from "@plane/types"
 import { Input } from "@plane/ui"
 import { ScrollTextIcon } from "lucide-react";
 
-export const ExtendedIssueProperties = (props: { issueProps: TIssue['props'], promoIssueType: EPromoIssueType }) => {
-    const { issueProps, promoIssueType } = props;
+export const ExtendedIssueProperties = (props: { issueProps: TIssue['props'], promoIssueType: EPromoIssueType, onPropsChange: (props: any) => void }) => {
+    const { issueProps, promoIssueType, onPropsChange } = props;
     if (promoIssueType === EPromoIssueType.UNDEFINED) return null;
     return (
         <div className="flex flex-col gap-3 border border-custom-border-200 rounded p-3">
@@ -21,8 +21,8 @@ export const ExtendedIssueProperties = (props: { issueProps: TIssue['props'], pr
                             id={prop.key}
                             name={prop.key}
                             type={prop.type}
-                            value={issueProps[prop.key]}
-                            onChange={() => { }}
+                            value={issueProps?.[prop.key]}
+                            onChange={(e) => { onPropsChange({...issueProps,[prop.key]: e.target.value})}}
                             placeholder={prop.title}
                             className="w-full text-base"
                             autoFocus

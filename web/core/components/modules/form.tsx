@@ -16,10 +16,18 @@ import { shouldRenderProject } from "@/helpers/project.helper";
 import { getTabIndex } from "@/helpers/tab-indices.helper";
 import { ChevronDownIcon } from "lucide-react";
 import { getFormatDropdownOptions } from "./cms-helpers/create-default-issues";
+import { EUserPermissions } from "ee/constants/user-permissions";
 // types
 
+type TModuleForm = IModule & {
+  writer_member_ids: string[];
+  se_member_ids: string[];
+  voa_member_ids: string[];
+  is_ideation_required: boolean;
+}
+
 type Props = {
-  handleFormSubmit: (values: Partial<IModule>, dirtyFields: any) => Promise<void>;
+  handleFormSubmit: (values: Partial<TModuleForm>, dirtyFields: any) => Promise<void>;
   handleClose: () => void;
   status: boolean;
   projectId: string;
@@ -28,7 +36,7 @@ type Props = {
   isMobile?: boolean;
 };
 
-const defaultValues: Partial<IModule> = {
+const defaultValues: Partial<TModuleForm> = {
   name: "",
   description: "",
   status: "backlog",
@@ -40,13 +48,11 @@ const defaultValues: Partial<IModule> = {
   team: "",
   format: "",
   parent_id: "",
-  voa_ids: [],
-  writer_ids: [],
-  se_ids: [],
-  sketch_artist_ids: [],
   creative_lead_id: "",
-  ideation_required: false,
-
+  writer_member_ids: [],
+  se_member_ids: [],
+  voa_member_ids: [],
+  is_ideation_required: false,
 };
 
 export const ModuleForm: React.FC<Props> = (props) => {
@@ -58,7 +64,7 @@ export const ModuleForm: React.FC<Props> = (props) => {
     control,
     reset,
     watch,
-  } = useForm<IModule>({
+  } = useForm<TModuleForm>({
     defaultValues: {
       project_id: projectId,
       name: data?.name || "",
@@ -70,22 +76,17 @@ export const ModuleForm: React.FC<Props> = (props) => {
       show_id: data?.show_id || "",
       original_show_id: data?.original_show_id || "",
       format: data?.format || "",
-      voa_ids: data?.voa_ids || [],
-      writer_ids: data?.writer_ids || [],
-      se_ids: data?.se_ids || [],
-      sketch_artist_ids: data?.sketch_artist_ids || [],
       creative_lead_id: data?.creative_lead_id || "",
-      ideation_required: data?.ideation_required || false,
-      freeze_workflow: data?.freeze_workflow || false,
+      is_ideation_required: false,
     },
   });
 
   const formatValue = watch("format");
-  const isWorkflowFreezed = watch("freeze_workflow");
+  const isWorkflowFreezed = data && data.total_issues >2;
 
   const { getIndex } = getTabIndex(ETabIndices.PROJECT_MODULE, isMobile);
 
-  const handleCreateUpdateModule = async (formData: Partial<IModule>) => {
+  const handleCreateUpdateModule = async (formData: Partial<TModuleForm>) => {
     await handleFormSubmit(formData, dirtyFields);
 
     reset({
@@ -151,7 +152,7 @@ export const ModuleForm: React.FC<Props> = (props) => {
           />
           {!data && <Controller
             control={control}
-            name="ideation_required"
+            name="is_ideation_required"
             render={({ field: { value, onChange } }) => (
               <div className="h-7 flex items-center gap-2 border-[0.5px] px-2 rounded border-custom-border-300">
                 <span className="text-xs">Ideation Required</span>
@@ -311,9 +312,11 @@ export const ModuleForm: React.FC<Props> = (props) => {
                 />
               )}
             />
+            {/*
             <div className="h-7">
               <ModuleStatusSelect control={control} error={errors.status} tabIndex={getIndex("status")} />
             </div>
+            */}
             <Controller
               control={control}
               name="creative_lead_id"
@@ -368,7 +371,7 @@ export const ModuleForm: React.FC<Props> = (props) => {
             /> */}
             <Controller
               control={control}
-              name="writer_ids"
+              name="writer_member_ids"
               rules={{
                 required: "Writers is required",
               }}
@@ -378,6 +381,7 @@ export const ModuleForm: React.FC<Props> = (props) => {
                     value={value}
                     onChange={onChange}
                     projectId={projectId}
+                    projectRole={EUserPermissions.WRITER}
                     multiple
                     buttonVariant={value && value.length > 0 ? "transparent-without-text" : "border-with-text"}
                     buttonClassName={value && value.length > 0 ? "hover:bg-transparent px-0" : ""}
@@ -390,7 +394,7 @@ export const ModuleForm: React.FC<Props> = (props) => {
             {formatValue && <>
               <Controller
                 control={control}
-                name="voa_ids"
+                name="voa_member_ids"
                 rules={{
                   validate: (value) => {
                     if (!value || value.length === 0) {
@@ -405,6 +409,7 @@ export const ModuleForm: React.FC<Props> = (props) => {
                       value={value}
                       onChange={onChange}
                       projectId={projectId}
+                      projectRole={EUserPermissions.VOA}
                       multiple
                       buttonVariant={value && value.length > 0 ? "transparent-without-text" : "border-with-text"}
                       buttonClassName={value && value.length > 0 ? "hover:bg-transparent px-0" : ""}
@@ -417,7 +422,7 @@ export const ModuleForm: React.FC<Props> = (props) => {
 
               <Controller
                 control={control}
-                name="se_ids"
+                name="se_member_ids"
                 rules={{
                   validate: (value) => {
                     if (!value || value.length === 0) {
@@ -432,6 +437,7 @@ export const ModuleForm: React.FC<Props> = (props) => {
                       value={value}
                       onChange={onChange}
                       projectId={projectId}
+                      projectRole={EUserPermissions.SE}
                       multiple
                       buttonVariant={value && value.length > 0 ? "transparent-without-text" : "border-with-text"}
                       buttonClassName={value && value.length > 0 ? "hover:bg-transparent px-0" : ""}
@@ -441,34 +447,6 @@ export const ModuleForm: React.FC<Props> = (props) => {
                   </div>
                 )}
               />
-              {formatValue === 'sketch' && (
-                <Controller
-                  control={control}
-                  name="sketch_artist_ids"
-                  rules={{
-                    validate: (value) => {
-                      if (!value || value.length === 0) {
-                        return "Sketch Artist is required for sketch format";
-                      }
-                      return true;
-                    }
-                  }}
-                  render={({ field: { value, onChange } }) => (
-                    <div className="h-7">
-                      <MemberDropdown
-                        value={value}
-                        onChange={onChange}
-                        projectId={projectId}
-                        multiple
-                        buttonVariant={value && value.length > 0 ? "transparent-without-text" : "border-with-text"}
-                        buttonClassName={value && value.length > 0 ? "hover:bg-transparent px-0" : ""}
-                        placeholder="Sketch Artist"
-                        tabIndex={getIndex("sketch_artist_ids")}
-                      />
-                    </div>
-                  )}
-                />
-              )}
             </>}
 
           </div>

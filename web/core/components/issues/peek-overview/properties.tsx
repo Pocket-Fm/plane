@@ -69,7 +69,11 @@ export const PeekOverviewProperties: FC<IPeekOverviewProperties> = observer((pro
       <h6 className="text-sm font-medium">Properties</h6>
       {/* TODO: render properties using a common component */}
       <div className={`w-full space-y-2 mt-3 ${disabled ? "opacity-60" : ""}`}>
-        <ExtendedIssueProperties issueProps={issue.props} promoIssueType={promoIssueType}/>
+        <ExtendedIssueProperties 
+          issueProps={issue.props} 
+          promoIssueType={promoIssueType}
+          onPropsChange={(props) => issueOperations.update(workspaceSlug, projectId, issueId, { props })}
+        />
    
         {/* state */}
         <div className="flex w-full items-center gap-3 h-8">

@@ -249,6 +249,8 @@ class ModuleSerializer(DynamicBaseSerializer):
             "external_source",
             "external_id",
             "logo_props",
+            # promo fields
+            "format",
             # computed fields
             "total_estimate_points",
             "completed_estimate_points",
