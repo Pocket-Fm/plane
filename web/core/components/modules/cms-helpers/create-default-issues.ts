@@ -15,23 +15,23 @@ const BASE_ISSUE_PAYLOAD: Partial<TIssue> = {
 };
 
 export const FORMAT_CONFIG = {
-  thumbnail: {
+  Thumbnail: {
     label: "Thumbnail",
     tasks: ["Design Thumbnail Mockups", "Finalize Thumbnail Dimensions", "Review Thumbnail with Stakeholders"],
   },
-  genai: {
+  "Gen AI": {
     label: "Gen AI",
     tasks: ["Generate Initial AI Concepts", "Refine AI-Generated Visuals", "Validate AI Output for Accuracy"],
   },
-  live_action: {
+  "Live Action": {
     label: "Live Action",
     tasks: ["Plan Live Action Script", "Organize Filming Schedule", "Edit Live Action Footage"],
   },
-  animation: {
+  Animation: {
     label: "Animation",
     tasks: ["Create Animation Storyboard", "Design Animation Assets", "Review Animation Workflow"],
   },
-  sketch: {
+  Sketch: {
     label: "Sketch",
     tasks: ["Draft Initial Sketches", "Digitize Sketch Concepts", "Finalize Sketch for Approval"],
   },
@@ -84,7 +84,7 @@ export const createFormatModuleIssues = async ({
   moduleId,
   moduleName,
   createIssue,
-  format="thumbnail",
+  format="Thumbnail",
 }: CreateFormatIssuesProps) => {
   const formatTasks = FORMAT_CONFIG[format].tasks;
   const issuePromises = formatTasks.map((taskName) => {

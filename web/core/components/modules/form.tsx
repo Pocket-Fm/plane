@@ -372,9 +372,9 @@ export const ModuleForm: React.FC<Props> = (props) => {
             <Controller
               control={control}
               name="writer_member_ids"
-              rules={{
-                required: "Writers is required",
-              }}
+              // rules={{
+              //   required: "Writers is required",
+              // }}
               render={({ field: { value, onChange } }) => (
                 <div className="h-7">
                   <MemberDropdown
@@ -395,14 +395,14 @@ export const ModuleForm: React.FC<Props> = (props) => {
               <Controller
                 control={control}
                 name="voa_member_ids"
-                rules={{
-                  validate: (value) => {
-                    if (!value || value.length === 0) {
-                      return "VOA is required for any format";
-                    }
-                    return true;
-                  }
-                }}
+                // rules={{
+                //   validate: (value) => {
+                //     if (!value || value.length === 0) {
+                //       return "VOA is required for any format";
+                //     }
+                //     return true;
+                //   }
+                // }}
                 render={({ field: { value, onChange } }) => (
                   <div className="h-7">
                     <MemberDropdown
@@ -423,14 +423,14 @@ export const ModuleForm: React.FC<Props> = (props) => {
               <Controller
                 control={control}
                 name="se_member_ids"
-                rules={{
-                  validate: (value) => {
-                    if (!value || value.length === 0) {
-                      return "SE is required for any format";
-                    }
-                    return true;
-                  }
-                }}
+                // rules={{
+                //   validate: (value) => {
+                //     if (!value || value.length === 0) {
+                //       return "SE is required for any format";
+                //     }
+                //     return true;
+                //   }
+                // }}
                 render={({ field: { value, onChange } }) => (
                   <div className="h-7">
                     <MemberDropdown

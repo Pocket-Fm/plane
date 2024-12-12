@@ -80,7 +80,7 @@ export const CreateUpdateModuleModal: React.FC<Props> = observer((props) => {
           moduleName: payload.name ?? "",
           createIssue: moduleIssues.createIssue,
           userId: currentUser?.id ?? "",
-          ideationRequired : payload.ideation_required ?? false
+          ideationRequired : payload.is_ideation_required ?? false
         });
       })
       .catch((err) => {
