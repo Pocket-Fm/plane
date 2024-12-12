@@ -2,12 +2,14 @@ export enum EUserPermissions {
   ADMIN = 20,
   MEMBER = 15,
   GUEST = 5,
+  //added by pocket FM---
+  WRITER = 14,
+  SE = 13,
+  VOA = 12,
+  //---------------------
 }
 
-export type TUserPermissions =
-  | EUserPermissions.ADMIN
-  | EUserPermissions.MEMBER
-  | EUserPermissions.GUEST;
+export type TUserPermissions = EUserPermissions;
 
 // project pages
 export enum EPageAccess {
