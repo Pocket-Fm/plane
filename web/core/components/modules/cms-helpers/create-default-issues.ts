@@ -1,3 +1,4 @@
+import { EPromoIssueType, PROMO_ISSUE_TYPE_NAME_SUFFIXES } from "@/constants/issue";
 import { TIssue } from "@plane/types";
 
 const BASE_ISSUE_PAYLOAD: Partial<TIssue> = {
@@ -10,6 +11,7 @@ const BASE_ISSUE_PAYLOAD: Partial<TIssue> = {
   label_ids: [],
   assignee_ids: [],
   sub_issues_count: 0,
+  props: {},
 };
 
 export const FORMAT_CONFIG = {
@@ -54,15 +56,16 @@ export const createDefaultModuleIssues = async ({
   userId,
   ideationRequired,
 }: CreateDefaultIssuesProps) => {
-  const defaultIssues = ideationRequired
-    ? [{ name: `${moduleName} | Ideation Task` }, { name: `${moduleName} | Writers Task` }]
-    : [{ name: `${moduleName} | Writers Task` }];
-  const issuePromises = defaultIssues.map((issue) => {
+  const defaultIssueTypes: EPromoIssueType[] = [EPromoIssueType.SCRIPT_WRITING];
+  if (ideationRequired)
+    defaultIssueTypes.unshift(EPromoIssueType.IDEATION);
+
+  const issuePromises = defaultIssueTypes.map((issueType) => {
     const payload: Partial<TIssue> = {
       ...BASE_ISSUE_PAYLOAD,
       project_id: projectId,
       module_ids: [moduleId],
-      name: issue.name,
+      name: `${moduleName} | ${PROMO_ISSUE_TYPE_NAME_SUFFIXES[issueType]}`,
       assignee_ids: [userId],
     };
     return createIssue(workspaceSlug, projectId, payload, moduleId);

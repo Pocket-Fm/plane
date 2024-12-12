@@ -16,9 +16,11 @@ import { ButtonAvatars } from "./avatar";
 import { MemberOptions } from "./member-options";
 // types
 import { MemberDropdownProps } from "./types";
+import { EUserPermissions } from "ee/constants/user-permissions";
 
 type Props = {
   projectId?: string;
+  projectRole?: EUserPermissions;
   icon?: LucideIcon;
   onClose?: () => void;
   renderByDefault?: boolean;
@@ -44,6 +46,7 @@ export const MemberDropdown: React.FC<Props> = observer((props) => {
     tooltipContent,
     placement,
     projectId,
+    projectRole,
     showTooltip = false,
     showUserDetails = false,
     tabIndex,
@@ -168,6 +171,7 @@ export const MemberDropdown: React.FC<Props> = observer((props) => {
           optionsClassName={optionsClassName}
           isOpen={isOpen}
           projectId={projectId}
+          projectRole={projectRole}
           placement={placement}
           referenceElement={referenceElement}
         />

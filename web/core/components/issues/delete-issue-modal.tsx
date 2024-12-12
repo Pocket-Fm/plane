@@ -70,7 +70,7 @@ export const DeleteIssueModal: React.FC<Props> = (props) => {
           setToast({
             type: TOAST_TYPE.SUCCESS,
             title: "Success!",
-            message: `${isSubIssue ? "Sub-issue" : "Issue"} deleted successfully`,
+            message: `${isSubIssue ? "Sub-task" : "Task"} deleted successfully`,
           });
           onClose();
         })

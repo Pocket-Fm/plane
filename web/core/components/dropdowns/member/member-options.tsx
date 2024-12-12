@@ -16,18 +16,20 @@ import { getFileURL } from "@/helpers/file.helper";
 // hooks
 import { useUser, useMember } from "@/hooks/store";
 import { usePlatformOS } from "@/hooks/use-platform-os";
+import { EUserPermissions } from "ee/constants/user-permissions";
 
 interface Props {
   className?: string;
   optionsClassName?: string;
   projectId?: string;
+  projectRole?: EUserPermissions
   referenceElement: HTMLButtonElement | null;
   placement: Placement | undefined;
   isOpen: boolean;
 }
 
 export const MemberOptions: React.FC<Props> = observer((props: Props) => {
-  const { projectId, referenceElement, placement, isOpen, optionsClassName = "" } = props;
+  const { projectId, referenceElement, placement, isOpen, optionsClassName = "" , projectRole} = props;
   // states
   const [query, setQuery] = useState("");
   const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);
@@ -37,7 +39,7 @@ export const MemberOptions: React.FC<Props> = observer((props: Props) => {
   const { workspaceSlug } = useParams();
   const {
     getUserDetails,
-    project: { getProjectMemberIds, fetchProjectMembers },
+    project: { getProjectMemberIds, fetchProjectMembers, getProjectMemberDetails },
     workspace: { workspaceMemberIds },
   } = useMember();
   const { data: currentUser } = useUser();
@@ -91,8 +93,13 @@ export const MemberOptions: React.FC<Props> = observer((props: Props) => {
     };
   });
 
-  const filteredOptions =
-    query === "" ? options : options?.filter((o) => o.query.toLowerCase().includes(query.toLowerCase()));
+  let filteredOptions = options;
+  if (query !== "")
+    filteredOptions = filteredOptions?.filter((o) => o.query.toLowerCase().includes(query.toLowerCase()));
+  if (projectRole)
+    filteredOptions = filteredOptions?.filter((o) => getProjectMemberDetails(o.value)?.role === projectRole);
+
+  
 
   return createPortal(
     <Combobox.Options data-prevent-outside-click static>
