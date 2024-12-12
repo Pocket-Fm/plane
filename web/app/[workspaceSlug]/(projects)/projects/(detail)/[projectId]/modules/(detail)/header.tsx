@@ -194,7 +194,7 @@ export const ModuleIssuesHeader: React.FC = observer(() => {
               link={
                 <BreadcrumbLink
                   href={`/${workspaceSlug}/projects/${projectId}/modules`}
-                  label="Modules"
+                  label="Promos"
                   icon={<DiceIcon className="h-4 w-4 text-custom-text-300" />}
                 />
               }
@@ -213,7 +213,7 @@ export const ModuleIssuesHeader: React.FC = observer(() => {
                             isMobile={isMobile}
                             tooltipContent={`There are ${issuesCount} ${
                               issuesCount > 1 ? "issues" : "issue"
-                            } in this module`}
+                            } in this promo`}
                             position="bottom"
                           >
                             <span className="flex flex-shrink-0 cursor-default items-center justify-center rounded-xl bg-custom-primary-100/20 px-2 text-center text-xs font-semibold text-custom-primary-100">

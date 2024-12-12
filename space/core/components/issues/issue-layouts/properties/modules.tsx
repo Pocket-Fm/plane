@@ -31,13 +31,13 @@ export const IssueBlockModules = observer(({ moduleIds, shouldShowBorder = true 
           >
             <div className="flex items-center gap-1.5 text-custom-text-200">
               <DiceIcon className="h-3 w-3 flex-shrink-0" />
-              <div className="text-xs">{modules?.[0]?.name ?? "No Modules"}</div>
+              <div className="text-xs">{modules?.[0]?.name ?? "No Promos"}</div>
             </div>
           </div>
         ) : (
           <div className="flex h-full flex-shrink-0 cursor-default items-center rounded-md border border-custom-border-300 px-2.5 py-1 text-xs">
             <div className="flex items-center gap-1.5 text-custom-text-200">
-              <div className="text-xs">{modules.length} Modules</div>
+              <div className="text-xs">{modules.length} Promos</div>
             </div>
           </div>
         )}

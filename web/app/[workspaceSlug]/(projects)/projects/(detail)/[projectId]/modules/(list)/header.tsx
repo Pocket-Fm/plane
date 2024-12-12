@@ -52,7 +52,7 @@ export const ModulesListHeader: React.FC = observer(() => {
             />
             <Breadcrumbs.BreadcrumbItem
               type="text"
-              link={<BreadcrumbLink label="Modules" icon={<DiceIcon className="h-4 w-4 text-custom-text-300" />} />}
+              link={<BreadcrumbLink label="Promos" icon={<DiceIcon className="h-4 w-4 text-custom-text-300" />} />}
             />
           </Breadcrumbs>
         </div>
@@ -68,7 +68,7 @@ export const ModulesListHeader: React.FC = observer(() => {
               toggleCreateModuleModal(true);
             }}
           >
-            <div className="hidden sm:block">Add</div> Module
+            <div className="hidden sm:block">Add</div> Promo
           </Button>
         ) : (
           <></>

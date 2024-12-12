@@ -54,7 +54,7 @@ export const ProjectNavigation: FC<TProjectItemsProps> = observer((props) => {
   const baseNavigation = useCallback(
     (workspaceSlug: string, projectId: string): TNavigationItem[] => [
       {
-        name: "Issues",
+        name: "Tasks",
         href: `/${workspaceSlug}/projects/${projectId}/issues`,
         icon: LayersIcon,
         access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
@@ -70,7 +70,7 @@ export const ProjectNavigation: FC<TProjectItemsProps> = observer((props) => {
         sortOrder: 2,
       },
       {
-        name: "Modules",
+        name: "Promos",
         href: `/${workspaceSlug}/projects/${projectId}/modules`,
         icon: DiceIcon,
         access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
@@ -94,7 +94,7 @@ export const ProjectNavigation: FC<TProjectItemsProps> = observer((props) => {
         sortOrder: 5,
       },
       {
-        name: "Intake",
+        name: "Promo Backlog",
         href: `/${workspaceSlug}/projects/${projectId}/inbox`,
         icon: Intake,
         access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],

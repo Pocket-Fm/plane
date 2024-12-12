@@ -54,10 +54,10 @@ const ModuleIssuesPage = observer(() => {
       {error ? (
         <EmptyState
           image={emptyModule}
-          title="Module does not exist"
-          description="The module you are looking for does not exist or has been deleted."
+          title="Promo does not exist"
+          description="The promo you are looking for does not exist or has been deleted."
           primaryButton={{
-            text: "View other modules",
+            text: "View other promos",
             onClick: () => router.push(`/${workspaceSlug}/projects/${projectId}/modules`),
           }}
         />

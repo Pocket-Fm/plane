@@ -44,7 +44,7 @@ export const PROJECT_FEATURES_LIST: TProjectFeatures = {
       },
       modules: {
         property: "module_view",
-        title: "Modules",
+        title: "Promos",
         description: "Group work into sub-project-like set-ups with their own leads and assignees.",
         icon: <DiceIcon width={20} height={20} className="flex-shrink-0 text-custom-text-300" />,
         isPro: false,
