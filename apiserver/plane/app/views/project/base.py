@@ -131,7 +131,7 @@ class ProjectViewSet(BaseViewSet):
         )
 
     @allow_permission(
-        allowed_roles=[ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST], level="WORKSPACE"
+        allowed_roles=[ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST, ROLE.WRITER], level="WORKSPACE"
     )
     def list(self, request, slug):
         fields = [field for field in request.GET.get("fields", "").split(",") if field]

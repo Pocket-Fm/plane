@@ -10,6 +10,9 @@ class ROLE(Enum):
     ADMIN = 20
     MEMBER = 15
     GUEST = 5
+    WRITER = 14
+    SE = 13
+    VOA = 12
 
 
 def allow_permission(allowed_roles, level="PROJECT", creator=False, model=None):

@@ -146,7 +146,7 @@ export const ProjectAuthWrapper: FC<IProjectAuthWrapper> = observer((props) => {
   // derived values
   const projectExists = projectId ? getProjectById(projectId.toString()) : null;
   const hasPermissionToCurrentProject = allowPermissions(
-    [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
+    [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST, EUserPermissions.WRITER],
     EUserPermissionsLevel.PROJECT,
     workspaceSlug.toString(),
     projectId?.toString()

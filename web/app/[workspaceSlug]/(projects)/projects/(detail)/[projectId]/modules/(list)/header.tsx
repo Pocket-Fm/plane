@@ -26,7 +26,7 @@ export const ModulesListHeader: React.FC = observer(() => {
 
   // auth
   const canUserCreateModule = allowPermissions(
-    [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
+    [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.WRITER],
     EUserPermissionsLevel.PROJECT
   );
 

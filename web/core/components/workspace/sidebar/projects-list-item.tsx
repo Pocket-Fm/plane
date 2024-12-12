@@ -71,7 +71,7 @@ const navigation = (workspaceSlug: string, projectId: string) => [
     name: "Tasks",
     href: `/${workspaceSlug}/projects/${projectId}/issues`,
     Icon: LayersIcon,
-    access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
+    access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST, EUserPermissions.WRITER],
   },
   {
     name: "Cycles",
@@ -83,7 +83,7 @@ const navigation = (workspaceSlug: string, projectId: string) => [
     name: "Promos",
     href: `/${workspaceSlug}/projects/${projectId}/modules`,
     Icon: DiceIcon,
-    access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
+    access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.WRITER],
   },
   {
     name: "Views",
